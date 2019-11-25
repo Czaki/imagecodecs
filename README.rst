@@ -1,5 +1,8 @@
 Image transformation, compression, and decompression codecs
 ===========================================================
+.. image:: https://dev.azure.com/bokota/open%20source%20contrib/_apis/build/status/Czaki.imagecodecs?branchName=master
+  :target: https://dev.azure.com/bokota/open%20source%20contrib/_build/latest?definitionId=3&branchName=master
+  :alt: Linux and MacOS Wheel Build Status
 
 Imagecodecs is a Python library that provides block-oriented, in-memory buffer
 transformation, compression, and decompression functions for use in the

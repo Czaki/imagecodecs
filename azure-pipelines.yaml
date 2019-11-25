@@ -1,0 +1,306 @@
+variables:
+  CIBW_TEST_COMMAND: python -m pytest {project}/tests/test_imagecodecs.py
+  CIBW_TEST_REQUIRES: scikit-image pytest scikit-image blosc lz4 zstd python-lzf tifffile czifile oiffile backports.lzma pyzfp
+  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2019.11.18
+  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:2019.11.18
+  CIBW_BEFORE_BUILD: "pip install numpy==1.16.5 cython"
+  BASE_PATH: $(Build.Repository.LocalPath)
+  LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build_utils/libs_build/lib
+  TEST_PYTHON_LIBS: scikit-image pytest pytest-azurepipelines scikit-image blosc lz4 zstd python-lzf tifffile czifile oiffile backports.lzma pyzfp
+
+stages:
+  - stage: Run
+    jobs:
+    - job: linux
+      pool: {vmImage: 'Ubuntu-16.04'}
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.6'
+        displayName: 'Use Python 3.6'
+
+      - bash: sudo apt install nasm autopoint
+        displayName: "install build tools"
+
+      - bash: bash build_utils/download_libraries.sh
+        displayName: "Download libraries"
+
+      - bash: bash build_utils/build_libraries.sh
+        displayName: "build libraries"
+
+      - script: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy cython
+          python -m pip install cibuildwheel
+        displayName: 'Install dependencies'
+
+      - bash: pip install ${TEST_PYTHON_LIBS}
+        displayName: "install test dependencies"
+
+      - script: pip install -e .
+        displayName: "install package"
+
+      - script: pytest tests/test_imagecodecs.py
+        displayName: "run test"
+
+    - job: linux_wheel_64
+      pool: {vmImage: 'Ubuntu-16.04'}
+      variables:
+        CIBW_BUILD: "*64"
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.6'
+        displayName: 'Use Python 3.6'
+
+      - script: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy cython
+          python -m pip install cibuildwheel
+        displayName: 'Install dependencies'
+
+      - script: cibuildwheel
+        displayName: "cibuildwheel"
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathToPublish: wheelhouse
+          artifactName: wheels
+
+
+    - job: linux_wheel_i686
+      pool: {vmImage: 'Ubuntu-16.04'}
+      variables:
+        CIBW_BUILD: "*686"
+
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.6'
+        displayName: 'Use Python 3.6'
+
+      - script: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy cython
+          python -m pip install cibuildwheel
+        displayName: 'Install dependencies'
+
+      - script: cibuildwheel
+        displayName: "cibuildwheel"
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathToPublish: wheelhouse
+          artifactName: wheels
+
+
+    - job: linux_build_docker
+      pool: {vmImage: 'Ubuntu-16.04'}
+      continueOnError: true
+      timeoutInMinutes: 100
+      variables:
+        CIBW_BUILD: cp37*
+        CIBW_MANYLINUX_X86_64_IMAGE: imagecodecs_manylinux2010_x86_64
+        CIBW_MANYLINUX_I686_IMAGE: imagecodecs_manylinux2010_i686
+
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.6'
+        displayName: 'Use Python 3.6'
+
+      - bash: bash build_utils/docker_64.sh
+        displayName: "Docker x86_64 image build"
+
+      - bash: bash build_utils/docker_i686.sh
+        displayName: "Docker i686 image build"
+
+      - script: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy cython
+          python -m pip install cibuildwheel
+        displayName: 'Install dependencies'
+
+      - script: cibuildwheel
+        displayName: "cibuildwheel"
+
+
+    - job: macos_test_build
+      pool: {vmImage: "macos-10.13"}
+      continueOnError: true
+      variables:
+        LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
+        DYLD_FALLBACK_LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        SKIP_OMP: True
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.6'
+          displayName: 'Use Python 3.6'
+
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9
+          displayName: "install build tools"
+
+        - bash: bash build_utils/download_libraries.sh
+          displayName: "Download libraries"
+
+        - bash: |
+            export LDFLAGS=-L/usr/local/opt/openssl/lib
+            export CPPFLAGS=-I/usr/local/opt/openssl/include
+            MACOSX_DEPLOYMENT_TARGET="10.10" bash build_utils/build_libraries.sh
+          displayName: "build libraries"
+
+        - bash: bash build_utils/fix_macos_lib.sh
+          displayName: "Fix libraries load path"
+
+        - bash: ls build_utils/libs_build/lib/*
+          displayName: "show install result"
+
+        - script: |
+            python -m pip install --upgrade pip
+            python -m pip install numpy cython
+            python -m pip install git+https://github.com/Czaki/cibuildwheel
+          displayName: 'Install dependencies'
+
+        - bash: pip install .
+          displayName: "Install project"
+
+        - bash: pip install ${TEST_PYTHON_LIBS}
+          displayName: "install test dependencies"
+
+        - script: pytest tests/test_imagecodecs.py
+          displayName: "run test"
+
+    - job: macos_test_build_10_13
+      pool: {vmImage: "macos-10.13"}
+      continueOnError: true
+      variables:
+        LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
+        DYLD_FALLBACK_LIBRARY_PATH: $(LD_LIBRARY_PATH)
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.6'
+          displayName: 'Use Python 3.6'
+
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9
+          displayName: "install build tools"
+
+        - bash: bash build_utils/download_libraries.sh
+          displayName: "Download libraries"
+
+        - bash: |
+            export LDFLAGS=-L/usr/local/opt/openssl/lib
+            export CPPFLAGS=-I/usr/local/opt/openssl/include
+            CC=gcc-9 CXX=g++-9 bash build_utils/build_libraries.sh
+          displayName: "build libraries"
+
+        - bash: bash build_utils/fix_macos_lib.sh
+          displayName: "Fix libraries load path"
+
+        - bash: ls build_utils/libs_build/lib/*
+          displayName: "show install result"
+
+        - script: |
+            python -m pip install --upgrade pip
+            python -m pip install numpy cython
+            python -m pip install git+https://github.com/Czaki/cibuildwheel
+          displayName: 'Install dependencies'
+
+        - bash: CC=gcc-9 CXX=g++-9 pip install .
+          displayName: "Install project"
+
+        - bash: pip install ${TEST_PYTHON_LIBS}
+          displayName: "install test dependencies"
+
+        - script: pytest tests/test_imagecodecs.py
+          displayName: "run test"
+
+    - job: macos_wheel_build_10_9
+      pool: {vmImage: "macos-10.13"}
+      continueOnError: true
+      timeoutInMinutes: 100
+      variables:
+        LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
+        DYLD_FALLBACK_LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        SKIP_OMP: True
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.6'
+          displayName: 'Use Python 3.6'
+
+        - bash: brew install pcre openssl nasm automake libtool
+          displayName: "install build tools"
+
+        - bash: bash build_utils/download_libraries.sh
+          displayName: "Download libraries"
+
+        - bash: |
+            export LDFLAGS=-L/usr/local/opt/openssl/lib
+            export CPPFLAGS=-I/usr/local/opt/openssl/include
+            MACOSX_DEPLOYMENT_TARGET="10.9" bash build_utils/build_libraries.sh
+          displayName: "build libraries"
+
+        - bash: bash build_utils/fix_macos_lib.sh
+          displayName: "Fix libraries load path"
+
+        - script: |
+            python -m pip install --upgrade pip
+            python -m pip install numpy cython
+            python -m pip install git+https://github.com/Czaki/cibuildwheel
+          displayName: 'Install dependencies'
+
+        - script: MACOSX_DEPLOYMENT_TARGET="10.9" cibuildwheel
+          displayName: "cibuildwheel"
+
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: wheelhouse
+            artifactName: wheels
+
+    - job: macos_wheel_build_10_13
+      pool: {vmImage: "macos-10.13"}
+      timeoutInMinutes: 100
+      continueOnError: true
+      variables:
+        LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
+        DYLD_FALLBACK_LIBRARY_PATH: $(LD_LIBRARY_PATH)
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.6'
+          displayName: 'Use Python 3.6'
+
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9
+          displayName: "install build tools"
+
+        - bash: bash build_utils/download_libraries.sh
+          displayName: "Download libraries"
+
+        - bash: |
+            export LDFLAGS=-L/usr/local/opt/openssl/lib
+            export CPPFLAGS=-I/usr/local/opt/openssl/include
+            CC=gcc-9 CXX=g++-9 bash build_utils/build_libraries.sh
+          displayName: "build libraries"
+
+        - bash: bash build_utils/fix_macos_lib.sh
+          displayName: "Fix libraries load path"
+
+        - script: |
+            python -m pip install --upgrade pip
+            python -m pip install numpy cython
+            python -m pip install git+https://github.com/Czaki/cibuildwheel
+          displayName: 'Install dependencies'
+
+        - script: CC=gcc-9 CXX=g++-9 MACOSX_DEPLOYMENT_TARGET="10.13" cibuildwheel
+          displayName: "cibuildwheel"
+
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: wheelhouse
+            artifactName: wheels
