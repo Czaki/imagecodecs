@@ -1,0 +1,21 @@
+FROM quay.io/pypa/manylinux2010_x86_64
+WORKDIR /opt/imagecodecs/build_utils
+
+
+COPY *patch /opt/imagecodecs/build_utils/
+
+COPY gettext_install.sh .
+COPY docker_prepare.sh .
+RUN ./docker_prepare.sh
+
+COPY download_libraries.sh .
+RUN ./download_libraries.sh
+
+COPY build_libraries.sh .
+RUN ./build_libraries.sh
+
+ENV BASE_PATH /opt/imagecodecs/
+ENV BASE_LIB_PATH ${BASE_PATH}/build_utils/libs_build/
+ENV LD_LIBRARY_PATH ${BASE_LIB_PATH}/lib:${BASE_LIB_PATH}/lib64:/usr/local/lib:/usr/local/lib64
+
+RUN yum install -y libpng-devel
