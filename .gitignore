@@ -1,4 +1,9 @@
 build_utils/libs_src
+build_utils/libs_build
+build_utils/*.gz
+build_utils/*.gz.*
+imagecodecs/_*.c
+wheelhouse
 liblzf-3.6.tar.gz
 .idea
 # Created by https://www.gitignore.io/api/vim,code,python,pycharm

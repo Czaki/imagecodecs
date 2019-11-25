@@ -1,0 +1,13 @@
+diff --git a/src/defaulttraits.h b/src/defaulttraits.h
+index 9655fd1..a386f15 100644
+--- a/src/defaulttraits.h
++++ b/src/defaulttraits.h
+@@ -103,7 +103,7 @@ struct DefaultTraitsT
+             errorValue -= RANGE;
+         }
+ 
+-        ASSERT(-RANGE / 2 <= errorValue && errorValue <= (RANGE / 2) - 1);
++        ASSERT(-RANGE / 2 <= errorValue && errorValue <=  ((RANGE+1) / 2)-1);
+         return errorValue;
+     }
+ 
