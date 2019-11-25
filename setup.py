@@ -5,6 +5,7 @@
 
 import sys
 import re
+import os
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
@@ -37,6 +38,8 @@ if 'sdist' in sys.argv:
     with open('README.rst', 'w') as fh:
         fh.write(readme)
 
+base_path = os.environ.get(
+    "BASE_PATH", os.path.dirname(os.path.abspath(__file__)))
 
 sources = [
     'imagecodecs/opj_color.c',
@@ -47,6 +50,22 @@ sources = [
 include_dirs = [
     'imagecodecs',
 ]
+
+library_dirs = [x for x in os.environ.get("LD_LIBRARY_PATH", os.environ.get("LIBRARY_PATH", "")).split(":") if x]
+
+include_base_path = os.path.join(base_path, "build_utils/libs_build/include")
+if os.path.exists(include_base_path):
+    include_dirs.append(include_base_path)
+    for el in os.listdir(include_base_path):
+        path_to_dir = os.path.join(include_base_path, el)
+        if os.path.isdir(path_to_dir):
+            include_dirs.append(path_to_dir)
+    jxr_path = os.path.join(include_base_path, "libjxr")
+    if os.path.exists(jxr_path):
+        for el in os.listdir(jxr_path):
+            path_to_dir = os.path.join(jxr_path, el)
+            if os.path.isdir(path_to_dir):
+                include_dirs.append(path_to_dir)
 
 try:
     # running in Windows development environment
@@ -78,13 +97,13 @@ except ImportError:
          '/usr/include/openjpeg-2.3'])
     define_macros = [('OPJ_HAVE_LIBLCMS2', 1)]
     if sys.platform == 'win32':
-        define_macros.append(('WIN32', 1), ('CHARLS_STATIC', 1))
+        define_macros.extend([('WIN32', 1), ('CHARLS_STATIC', 1)])
     else:
         libraries.append('m')
     libraries_jpeg12 = []  # 'jpeg12'
-    libraries_jpegls = []  # 'charls'
-    libraries_zfp = []  # 'zfp'
-    openmp_args = ['-fopenmp']
+    libraries_jpegls = ["CharLS"]  # 'CharLS'
+    libraries_zfp = ["zfp"]  # 'zfp'
+    openmp_args = [] if os.environ.get("SKIP_OMP", False) else ['-fopenmp']
 
 
 if 'lzf' not in libraries and 'liblzf' not in libraries:
@@ -124,6 +143,7 @@ ext_modules = [
         ['imagecodecs/imagecodecs.c', 'imagecodecs/_imagecodecs_lite' + ext],
         include_dirs=['imagecodecs'],
         libraries=[] if sys.platform == 'win32' else ['m'],
+        library_dirs=library_dirs,
     ),
     Extension(
         'imagecodecs._imagecodecs',
@@ -131,6 +151,7 @@ ext_modules = [
         include_dirs=include_dirs,
         libraries=libraries,
         define_macros=define_macros,
+        library_dirs=library_dirs,
     )
 ]
 
@@ -150,8 +171,9 @@ if libraries_jpegls:
         Extension(
             'imagecodecs._jpegls',
             ['imagecodecs/_jpegls' + ext],
-            include_dirs=['imagecodecs'],
+            include_dirs=include_dirs,
             libraries=libraries_jpegls,
+            library_dirs=library_dirs,
             define_macros=define_macros,
         )
     ]
@@ -161,10 +183,11 @@ if libraries_zfp:
         Extension(
             'imagecodecs._zfp',
             ['imagecodecs/_zfp' + ext],
-            include_dirs=['imagecodecs'],
+            include_dirs=include_dirs,
             libraries=libraries_zfp,
+            library_dirs=library_dirs,
             define_macros=define_macros,
-            extra_compile_args=openmp_args
+            extra_compile_args=openmp_args,
         )
     ]
 

@@ -1035,6 +1035,8 @@ def test_webp_decode(output):
 @pytest.mark.parametrize('dtype', ['float32', 'float64', 'int32', 'int64'])
 def test_zfp(dtype, itype, enout, deout, mode, execution):
     """Test ZFP codecs."""
+    if execution == "omp" and os.environ.get("SKIP_OMP", False):
+        pytest.skip("omp test skip because of enviroment variable")
     decode = imagecodecs.zfp_decode
     encode = imagecodecs.zfp_encode
     mode, level = mode
