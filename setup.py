@@ -101,8 +101,18 @@ except ImportError:
     else:
         libraries.append('m')
     libraries_jpeg12 = []  # 'jpeg12'
-    libraries_jpegls = ["CharLS"]  # 'CharLS'
-    libraries_zfp = ["zfp"]  # 'zfp'
+    for dir_path in include_dirs:
+        if os.path.exists(os.path.join(dir_path, "charls.h")):
+            libraries_jpegls = ["CharLS"]
+            break
+    else:
+        libraries_jpegls = []  # 'CharLS'
+    for dir_path in include_dirs:
+        if os.path.exists(os.path.join(dir_path, "zfp.h")):
+            libraries_zfp = ["zfp"]
+            break
+    else:
+        libraries_zfp = []  # 'CharLS'
     openmp_args = [] if os.environ.get("SKIP_OMP", False) else ['-fopenmp']
 
 
@@ -111,12 +121,14 @@ if 'lzf' not in libraries and 'liblzf' not in libraries:
     sources.extend(['liblzf-3.6/lzf_c.c', 'liblzf-3.6/lzf_d.c'])
     include_dirs.append('liblzf-3.6')
 
-
+print("aaa", 'bitshuffle' not in libraries, )
 if 'bitshuffle' not in libraries and 'bitshuffle' not in libraries:
+    print("bbb")
     # use bitshuffle sources from sdist
     sources.extend(['bitshuffle-0.3.5/bitshuffle_core.c',
                     'bitshuffle-0.3.5/iochain.c'])
     include_dirs.append('bitshuffle-0.3.5')
+print("ccc")
 
 
 class build_ext(_build_ext):
