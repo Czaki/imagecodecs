@@ -13,7 +13,8 @@ git clone --depth 1 --branch v5.2.4 https://github.com/xz-mirror/xz "${download_
 git clone --depth 1 --branch v1.6.37 https://github.com/glennrp/libpng "${download_dir}/libpng"
 git clone --depth 1 --branch v1.0.3 https://github.com/webmproject/libwebp "${download_dir}/libwebp"
 git clone --depth 1 --branch 2.0.3 https://github.com/libjpeg-turbo/libjpeg-turbo "${download_dir}/libjpeg-turbo"
-git clone --depth 1 --branch 2.0.0 https://github.com/team-charls/charls "${download_dir}/charls"
+# git clone --depth 1 --branch 2.1.0-rc1 https://github.com/team-charls/charls "${download_dir}/charls"
+git clone https://github.com/team-charls/charls "${download_dir}/charls"
 git clone --depth 1 --branch v2.3.1 https://github.com/uclouvain/openjpeg "${download_dir}/openjpeg"
 git clone --depth 1 --branch v0.2.1 https://github.com/glencoesoftware/jxrlib "${download_dir}/jxrlib"
 git clone --depth 1 --branch 0.5.5 https://github.com/LLNL/zfp "${download_dir}/zfp"
@@ -24,3 +25,6 @@ mv "${download_dir}/liblzf-3.6" "${download_dir}/liblzf"
 
 wget -q 'https://sourceforge.net/projects/swig/files/swig/swig-3.0.10/swig-3.0.10.tar.gz'
 tar zxvf  swig-3.0.10.tar.gz -C "${download_dir}"
+
+cd "${download_dir}/charls"
+git reset --hard 4a97b981f973d5f3481d3dde5e90e217c1194ca3

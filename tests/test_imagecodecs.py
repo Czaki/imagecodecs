@@ -40,7 +40,7 @@
 
 :License: 3-clause BSD
 
-:Version: 2019.11.18
+:Version: 2019.11.26
 
 """
 
@@ -99,8 +99,6 @@ else:
         from imagecodecs import _zfp
     except ImportError:
         _zfp = None
-
-    from skimage.util.dtype import convert
 
 
 IS_PY2 = sys.version_info[0] == 2
@@ -1035,8 +1033,8 @@ def test_webp_decode(output):
 @pytest.mark.parametrize('dtype', ['float32', 'float64', 'int32', 'int64'])
 def test_zfp(dtype, itype, enout, deout, mode, execution):
     """Test ZFP codecs."""
-    if execution == "omp" and os.environ.get("SKIP_OMP", False):
-        pytest.skip("omp test skip because of enviroment variable")
+    if execution == 'omp' and os.environ.get('SKIP_OMP', False):
+        pytest.skip('omp test skip because of enviroment variable')
     decode = imagecodecs.zfp_decode
     encode = imagecodecs.zfp_encode
     mode, level = mode
@@ -1075,7 +1073,7 @@ def test_zfp(dtype, itype, enout, deout, mode, execution):
         atol = 1e-6
     else:
         atol = 20
-    assert_allclose(data, (decoded), atol=atol, rtol=0)
+    assert_allclose(data, decoded, atol=atol, rtol=0)
 
 
 @pytest.mark.skipif(not hasattr(imagecodecs, 'jxr_decode'),
@@ -1140,7 +1138,7 @@ def test_jxr(itype, enout, deout, level):
         atol = 0.005 if dtype.kind == 'f' else 8 if dtype == 'uint8' else 12
     else:
         atol = 0.1 if dtype.kind == 'f' else 64 if dtype == 'uint8' else 700
-    assert_allclose(data, (decoded), atol=atol, rtol=0)
+    assert_allclose(data, decoded, atol=atol, rtol=0)
 
 
 @pytest.mark.skipif(not hasattr(imagecodecs, 'jpeg_decode'),
@@ -1346,8 +1344,23 @@ def image_data(itype, dtype):
     else:
         raise ValueError('itype not found')
 
-    # TODO: replace skimage convert with dtype codec
-    data = convert(data.copy(), dtype)
+    data = data.copy()
+
+    dtype = numpy.dtype(dtype)
+    if dtype.kind in 'iu':
+        iinfo = numpy.iinfo(dtype)
+        if dtype.kind == 'u':
+            data *= iinfo.max + 1
+        else:
+            data *= (iinfo.max - iinfo.max) / 2
+            data -= 1.0 / 2.0
+        data = numpy.rint(data)
+        data = numpy.clip(data, iinfo.min, iinfo.max)
+    elif dtype.kind != 'f':
+        raise NotImplementedError('dtype not supported')
+
+    data = data.astype(dtype)
+
     if dtype == 'uint16':
         # 12-bit
         data //= 16
@@ -1361,7 +1374,7 @@ def image_data(itype, dtype):
     return data
 
 
-DATA = numpy.load(datafiles('testdata.npy'))
+DATA = numpy.load(datafiles('testdata.npy'))  # (32, 31, 9) float64
 BYTES = readfile('bytes.bin')
 BYTESIMG = numpy.frombuffer(BYTES, 'uint8').reshape(16, 16)
 WORDS = readfile('words.bin')

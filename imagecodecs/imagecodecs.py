@@ -46,7 +46,7 @@ The module is intended for testing and reference, not production code.
 
 :License: 3-clause BSD
 
-:Version: 2019.11.18
+:Version: 2019.11.26
 
 Revisions
 ---------
@@ -93,7 +93,7 @@ Revisions
 
 from __future__ import division, print_function
 
-__version__ = '2019.11.18.py'
+__version__ = '2019.11.26.py'
 __docformat__ = 'restructuredtext en'
 
 import sys
@@ -760,13 +760,13 @@ def zfp_decode(data, shape=None, dtype=None, out=None):
 
 @notimplemented(bitshuffle)
 def bitshuffle_lz4_encode(data, level=1, blocksize=0, out=None):
-    """Compress LZW with Bitshuffle."""
+    """Compress LZ4 with Bitshuffle."""
     return bitshuffle.compress_lz4(data, blocksize)
 
 
 @notimplemented(bitshuffle)
 def bitshuffle_lz4_decode(data, shape, dtype, blocksize=0, out=None):
-    """Decompress LZW with Bitshuffle."""
+    """Decompress LZ4 with Bitshuffle."""
     return bitshuffle.decompress_lz4(data, shape, dtype, blocksize)
 
 
