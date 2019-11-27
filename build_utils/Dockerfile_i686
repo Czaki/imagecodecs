@@ -18,4 +18,5 @@ ENV BASE_PATH /opt/imagecodecs/
 ENV BASE_LIB_PATH ${BASE_PATH}/build_utils/libs_build/
 ENV LD_LIBRARY_PATH ${BASE_LIB_PATH}/lib:/usr/local/lib
 
-RUN yum install -y libpng-devel
+ENV C_INCLUDE_PATH ${BASE_LIB_PATH}/include
+ENV LIBRARY_PATH ${LD_LIBRARY_PATH}

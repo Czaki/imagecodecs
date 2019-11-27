@@ -25,6 +25,13 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+echo "Build charls"
+cd "${download_dir}/charls" || exit 1
+mkdir -p build
+cd build || exit 1
+${CMAKE3} -DCMAKE_INSTALL_PREFIX="${build_dir}" -DBUILD_SHARED_LIBS=1 -DCMAKE_BUILD_TYPE=Release ..
+make install
+
 echo "build swig"
 cd "${download_dir}/swig-3.0.10" || exit 1
 ./configure --prefix="${build_dir}"
@@ -72,15 +79,6 @@ cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
 cmake --build .
 # ctest
 cmake --build . --target install
-
-echo "Build charls"
-cd "${download_dir}/charls" || exit 1
-git stash
-git apply "${DIR}/charls.patch"
-mkdir -p build
-cd build || exit 1
-cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DBUILD_SHARED_LIBS=1 -DCMAKE_BUILD_TYPE=Release ..
-make install
 
 echo "Build libjpeg-turbo"
 cd "${download_dir}/libjpeg-turbo" || exit 1

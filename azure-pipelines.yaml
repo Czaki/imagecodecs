@@ -1,12 +1,11 @@
 variables:
   CIBW_TEST_COMMAND: python -m pytest {project}/tests/test_imagecodecs.py
-  CIBW_TEST_REQUIRES: scikit-image pytest scikit-image blosc lz4 zstd python-lzf tifffile czifile oiffile backports.lzma pyzfp
-  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2019.11.18
-  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:2019.11.18
-  CIBW_BEFORE_BUILD: "pip install numpy==1.16.5 cython"
+  CIBW_TEST_REQUIRES: -r requirements_azure.txt
+  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:latest
+  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:latest
+  CIBW_BEFORE_BUILD: "pip install numpy==1.16.5 cython; pip install git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
   BASE_PATH: $(Build.Repository.LocalPath)
   LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build_utils/libs_build/lib
-  TEST_PYTHON_LIBS: scikit-image pytest pytest-azurepipelines scikit-image blosc lz4 zstd python-lzf tifffile czifile oiffile backports.lzma pyzfp
 
 stages:
   - stage: Run
@@ -19,7 +18,9 @@ stages:
           versionSpec: '3.6'
         displayName: 'Use Python 3.6'
 
-      - bash: sudo apt-get -y install nasm autopoint
+      - bash: |
+          sudo apt-get -y update
+          sudo apt-get -y install nasm autopoint libhdf5-dev
         displayName: "install build tools"
 
       - bash: bash build_utils/download_libraries.sh
@@ -34,7 +35,7 @@ stages:
           python -m pip install cibuildwheel
         displayName: 'Install dependencies'
 
-      - bash: pip install ${TEST_PYTHON_LIBS}
+      - bash: pip install ${CIBW_TEST_REQUIRES}
         displayName: "install test dependencies"
 
       - script: pip install -e .
@@ -47,6 +48,7 @@ stages:
       pool: {vmImage: 'Ubuntu-18.04'}
       variables:
         BASE_PATH: False
+        LD_LIBRARY_PATH: ""
       continueOnError: true
       steps:
       - task: UsePythonVersion@0
@@ -56,7 +58,7 @@ stages:
 
       - bash: |
           sudo apt-get -y update
-          sudo apt-get -y install build-essential python3-dev cython3 python3-setuptools python3-pip python3-wheel python3-numpy libz-dev libblosc-dev liblzma-dev liblz4-dev libzstd-dev libpng-dev libwebp-dev libbz2-dev libopenjp2-7-dev libjpeg-turbo8-dev libjxr-dev liblcms2-dev libtiff-dev
+          sudo apt-get -y install libhdf5-dev build-essential python3-dev cython3 python3-setuptools python3-pip python3-wheel python3-numpy python3-pytest libz-dev libblosc-dev liblzma-dev liblz4-dev libzstd-dev libpng-dev libwebp-dev libbz2-dev libopenjp2-7-dev libjpeg-turbo8-dev libjxr-dev liblcms2-dev libcharls-dev libtiff-dev python3-blosc
         displayName: "install depended libs"
 
       - script: |
@@ -65,7 +67,7 @@ stages:
           python -m pip install cibuildwheel
         displayName: 'Install dependencies'
 
-      - bash: pip install ${TEST_PYTHON_LIBS}
+      - bash: pip install ${CIBW_TEST_REQUIRES}
         displayName: "install test dependencies"
 
       - script: pip install -e .
@@ -169,7 +171,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9
+        - bash: brew install pcre openssl nasm automake libtool
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -178,8 +180,11 @@ stages:
         - bash: |
             export LDFLAGS=-L/usr/local/opt/openssl/lib
             export CPPFLAGS=-I/usr/local/opt/openssl/include
-            MACOSX_DEPLOYMENT_TARGET="10.10" bash build_utils/build_libraries.sh
+            MACOSX_DEPLOYMENT_TARGET="10.9" bash build_utils/build_libraries.sh
           displayName: "build libraries"
+
+        - bash: bash build_utils/macos_hdf5.sh
+          displayName: "Setup hdf5"
 
         - bash: bash build_utils/fix_macos_lib.sh
           displayName: "Fix libraries load path"
@@ -196,7 +201,7 @@ stages:
         - bash: pip install .
           displayName: "Install project"
 
-        - bash: pip install ${TEST_PYTHON_LIBS}
+        - bash: pip install ${CIBW_TEST_REQUIRES}
           displayName: "install test dependencies"
 
         - script: pytest tests/test_imagecodecs.py
@@ -214,7 +219,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -241,7 +246,7 @@ stages:
         - bash: CC=gcc-9 CXX=g++-9 pip install .
           displayName: "Install project"
 
-        - bash: pip install ${TEST_PYTHON_LIBS}
+        - bash: pip install ${CIBW_TEST_REQUIRES}
           displayName: "install test dependencies"
 
         - script: pytest tests/test_imagecodecs.py
@@ -261,7 +266,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool
+        - bash: brew install pcre openssl nasm automake libtool pkg-config
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -272,6 +277,9 @@ stages:
             export CPPFLAGS=-I/usr/local/opt/openssl/include
             MACOSX_DEPLOYMENT_TARGET="10.9" bash build_utils/build_libraries.sh
           displayName: "build libraries"
+
+        - bash: bash build_utils/macos_hdf5.sh
+          displayName: "Setup hdf5"
 
         - bash: bash build_utils/fix_macos_lib.sh
           displayName: "Fix libraries load path"
@@ -303,7 +311,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5 pkg-config
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh

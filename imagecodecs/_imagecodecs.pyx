@@ -58,7 +58,7 @@ and Bitshuffle.
 
 :License: 3-clause BSD
 
-:Version: 2019.11.18
+:Version: 2019.11.26
 
 Requirements
 ------------
@@ -79,7 +79,7 @@ This release has been tested with the following requirements and dependencies
 * `libwebp 1.0.3 <https://github.com/webmproject/libwebp>`_
 * `libjpeg-turbo 2.0.3 <https://github.com/libjpeg-turbo/libjpeg-turbo>`_
   (8 and 12-bit)
-* `charls-2.0.0 <https://github.com/team-charls/charls>`_
+* `charls 2.1.0 rc1 <https://github.com/team-charls/charls>`_
 * `openjpeg 2.3.1 <https://github.com/uclouvain/openjpeg>`_
 * `jxrlib 0.2.1 <https://github.com/glencoesoftware/jxrlib>`_
 * `zfp 0.5.5 <https://github.com/LLNL/zfp>`_
@@ -90,7 +90,6 @@ Required for testing (other versions may work):
 
 * `tifffile 2019.7.26 <https://pypi.org/project/tifffile/>`_
 * `czifile 2019.7.2 <https://pypi.org/project/czifile/>`_
-* `scikit-image 0.16.2 <https://github.com/scikit-image>`_
 * `python-blosc 1.8.1 <https://github.com/Blosc/python-blosc>`_
 * `python-lz4 2.2.1 <https://github.com/python-lz4/python-lz4>`_
 * `python-zstd 1.4.4 <https://github.com/sergey-dryabzhinsky/python-zstd>`_
@@ -107,7 +106,7 @@ The API is not stable yet and might change between revisions.
 
 Works on little-endian platforms only.
 
-Python 2.7 and 32-bit are deprecated.
+Python 2.7, 3.5, and 32-bit are deprecated.
 
 The `Microsoft Visual C++ Redistributable Packages
 <https://support.microsoft.com/en-us/help/2977003/
@@ -122,14 +121,17 @@ This software includes modified versions of `dcm2niix's jpg_0XC3.cpp
 and `openjpeg's color.c
 <https://github.com/uclouvain/openjpeg/blob/master/src/bin/common/color.c>`_.
 
+Manylinux and macOS wheels courtesy of `Grzegorz Bokota
+<https://github.com/Czaki>`_.
+
 To install the requirements for building imagecodecs from source code on
 current Debian based Linux distributions, run:
 
     ``$ sudo apt-get install build-essential python3-dev cython3
-    python3-setuptools python3-pip python3-wheel python3-numpy
+    python3-setuptools python3-pip python3-wheel python3-numpy python3-pytest
     libz-dev libblosc-dev liblzma-dev liblz4-dev libzstd-dev libpng-dev
     libwebp-dev libbz2-dev libopenjp2-7-dev libjpeg62-turbo-dev libjxr-dev
-    liblcms2-dev libtiff-dev``
+    liblcms2-dev libcharls-dev libtiff-dev python3-blosc``
 
 The imagecodecs package can be challenging to build from source code. Consider
 using the `imagecodecs-lite <https://pypi.org/project/imagecodecs-lite/>`_
@@ -153,8 +155,11 @@ Other Python packages providing imaging or compression codecs:
 
 Revisions
 ---------
-2019.11.18
+2019.11.26
     Pass 2755 tests.
+    Do not require scikit-image for testing.
+    Use CharLS 2.1.
+2019.11.18
     Add bitshuffle codec.
     Fix formatting of unknown error numbers.
     Fix test failures with official python-lzf.
@@ -201,7 +206,7 @@ Revisions
     Improve color space handling in JPEG codecs.
 2018.10.28
     Rename jpeg0xc3 to jpegsof3.
-    Add JPEG LS codec via libcharls.
+    Add JPEG LS codec via CharLS.
     Fix missing alpha values in jxr_decode.
     Fix decoding JPEG SOF3 with multiple DHTs.
 2018.10.22
@@ -240,7 +245,7 @@ Revisions
 
 """
 
-__version__ = '2019.11.18'
+__version__ = '2019.11.26'
 
 import io
 import numbers

@@ -13,3 +13,4 @@ cd "${download_dir}/gettext-0.20"
 sh ./configure --disable-java 
 make
 make install
+make clean

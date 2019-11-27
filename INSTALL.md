@@ -56,10 +56,10 @@ For all wheels `export CIBW_BUILD="*"`.
 
 Other variables needed 
 ```bash
-export CIBW_TEST_REQUIRES="-r test_requirements.txt"
+export CIBW_TEST_REQUIRES="-r requirements_test.txt"
 export CIBW_TEST_COMMAND="python -m pytest {project}/tests/test_imagecodecs.py"
 export CIBW_PLATFORM=linux
-export CIBW_BEFORE_BUILD="pip install numpy==1.16.5 cython"
+export CIBW_BEFORE_BUILD="pip install numpy==1.16.5 cython git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
 ```
 numpy in version 1.16.5 is needed for python 2.7
 
