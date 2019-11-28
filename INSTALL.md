@@ -51,7 +51,7 @@ export CIBW_MANYLINUX_I686_IMAGE=imagecodecs_manylinux2010_i686
 ``` 
 
 For 64 bits wheels `export CIBW_BUILD="*64"`.
-For 32 bits wheels `export CIBW_BUILD="*i686".`
+For 32 bits wheels `export CIBW_BUILD="*i686"`.
 For all wheels `export CIBW_BUILD="*"`.
 
 Other variables needed 
@@ -59,7 +59,7 @@ Other variables needed
 export CIBW_TEST_REQUIRES="-r requirements_test.txt"
 export CIBW_TEST_COMMAND="python -m pytest {project}/tests/test_imagecodecs.py"
 export CIBW_PLATFORM=linux
-export CIBW_BEFORE_BUILD="pip install numpy==1.16.5 cython git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
+export CIBW_BEFORE_BUILD="pip install numpy==1.16.5; pip install cython git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
 ```
 numpy in version 1.16.5 is needed for python 2.7
 
