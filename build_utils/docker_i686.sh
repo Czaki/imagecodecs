@@ -3,4 +3,4 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 cd "${DIR}"
-docker build -f Dockerfile_i686 -t imagecodecs_manylinux2010_i686 . && docker run imagecodecs_manylinux2010_i686
+docker build -f Dockerfile_i686 -t imagecodecs_manylinux2010_i686 .

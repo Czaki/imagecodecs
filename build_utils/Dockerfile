@@ -18,7 +18,5 @@ ENV BASE_PATH /opt/imagecodecs/
 ENV BASE_LIB_PATH ${BASE_PATH}/build_utils/libs_build/
 ENV LD_LIBRARY_PATH ${BASE_LIB_PATH}/lib:${BASE_LIB_PATH}/lib64:/usr/local/lib:/usr/local/lib64
 
-RUN yum install -y hdf5-devel libtool
-
 ENV C_INCLUDE_PATH ${BASE_LIB_PATH}/include
 ENV LIBRARY_PATH ${LD_LIBRARY_PATH}

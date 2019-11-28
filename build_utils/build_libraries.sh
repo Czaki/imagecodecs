@@ -8,11 +8,11 @@ PATH=${build_dir}/bin:${PATH}
 LD_LIBRARY_PATH=${build_dir}/lib:${LD_LIBRARY_PATH}
 # export CPLUS_INCLUDE_PATH=:${build_dir}/include:${CPLUS_INCLUDE_PATH}
 
-if [ -x "$(command -v cmake3)" ]; then
-  CMAKE3=cmake3
-else
-  CMAKE3=cmake
+if [ -z "${ZFP_CMAKE}" ]; then
+  ZFP_CMAKE=cmake
 fi
+
+echo "aaa ${ZFP_CMAKE}"
 
 ls "${download_dir}"
 
@@ -29,7 +29,7 @@ echo "Build charls"
 cd "${download_dir}/charls" || exit 1
 mkdir -p build
 cd build || exit 1
-${CMAKE3} -DCMAKE_INSTALL_PREFIX="${build_dir}" -DBUILD_SHARED_LIBS=1 -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DBUILD_SHARED_LIBS=1 -DCMAKE_BUILD_TYPE=Release ..
 make install
 
 echo "build swig"
@@ -58,7 +58,7 @@ echo "Build libpng"
 cd "${download_dir}/libpng" || exit 1
 mkdir -p build
 cd build || exit 1
-${CMAKE3} -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
 make install
 
 
@@ -133,7 +133,7 @@ echo "Build zfp"
 cd "${download_dir}/zfp" || exit 1
 mkdir -p build
 cd build || exit 1
-${CMAKE3} -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+${ZFP_CMAKE} -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
 make install
 
 echo "Build zlib"
