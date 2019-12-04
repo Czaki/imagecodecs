@@ -19,6 +19,8 @@ git clone --depth 1 --branch v2.3.1 https://github.com/uclouvain/openjpeg "${dow
 git clone --depth 1 --branch v0.2.1 https://github.com/glencoesoftware/jxrlib "${download_dir}/jxrlib"
 git clone --depth 1 --branch 0.5.5 https://github.com/LLNL/zfp "${download_dir}/zfp"
 git clone --depth 1 --branch lcms2.9 https://github.com/mm2/Little-CMS "${download_dir}/Little-CMS"
+git clone --depth 1 --branch v1.0.4 https://gitlab.dkrz.de/k202009/libaec "${download_dir}/libaec"
+
 wget -q http://dist.schmorp.de/liblzf/liblzf-3.6.tar.gz
 tar zxvf  liblzf-3.6.tar.gz -C "${download_dir}"
 mv "${download_dir}/liblzf-3.6" "${download_dir}/liblzf"
@@ -27,4 +29,4 @@ wget -q 'https://sourceforge.net/projects/swig/files/swig/swig-3.0.10/swig-3.0.1
 tar zxvf  swig-3.0.10.tar.gz -C "${download_dir}"
 
 cd "${download_dir}/charls"
-git reset --hard 4a97b981f973d5f3481d3dde5e90e217c1194ca3
+git reset --hard 9ba26b31e88c42317208216ab5651d8ee56ce1cb

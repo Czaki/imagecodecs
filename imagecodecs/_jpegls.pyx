@@ -48,13 +48,11 @@
 
 :License: 3-clause BSD
 
-:Version: 2019.11.16
+:Version: 2019.11.28
 
 """
 
-__version__ = '2019.11.16'
-
-_CHARLS_VERSION = '2.1.0'
+__version__ = '2019.11.28'
 
 import numbers
 import numpy
@@ -73,6 +71,10 @@ numpy.import_array()
 # JPEG LS #####################################################################
 
 cdef extern from 'charls/charls.h':
+
+    int CHARLS_VERSION_MAJOR
+    int CHARLS_VERSION_MINOR
+    int CHARLS_VERSION_PATCH
 
     ctypedef enum charls_jpegls_errc:
         CHARLS_JPEGLS_ERRC_SUCCESS
@@ -320,6 +322,10 @@ cdef extern from 'charls/charls.h':
     charls_jpegls_errc charls_jpegls_encoder_get_bytes_written(
         const charls_jpegls_encoder* encoder,
         size_t* bytes_written) nogil
+
+
+_CHARLS_VERSION = ('%i.%i.%i' % (
+    CHARLS_VERSION_MAJOR, CHARLS_VERSION_MINOR, CHARLS_VERSION_PATCH))
 
 
 class JpegLsError(RuntimeError):

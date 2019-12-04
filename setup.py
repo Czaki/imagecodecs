@@ -57,7 +57,7 @@ if 'CG-' in os.environ.get('COMPUTERNAME', ''):
     libraries = [
         'zlib', 'lz4', 'webp', 'png', 'jxrlib', 'jpeg', 'lzf', 'libbz2',
         'libblosc', 'snappy', 'zstd_static', 'lzma-static', 'openjp2',
-        'lcms2']
+        'libaec', 'lcms2']
     define_macros = [('WIN32', 1), ('LZMA_API_STATIC', 1),
                      ('OPJ_STATIC', 1), ('OPJ_HAVE_LIBLCMS2', 1),
                      ('CHARLS_STATIC', 1)]
@@ -73,7 +73,7 @@ if 'CG-' in os.environ.get('COMPUTERNAME', ''):
 elif os.environ.get('LD_LIBRARY_PATH', os.environ.get('LIBRARY_PATH', '')):
     # Czaki's CI environment
     libraries = ['jpeg', 'lz4', 'zstd', 'lzma', 'bz2', 'png', 'webp', 'blosc',
-                 'openjp2', 'jxrglue', 'jpegxr', 'lcms2', 'z', 'm']
+                 'openjp2', 'jxrglue', 'jpegxr', 'aec', 'lcms2', 'z', 'm']
     libraries_jpeg12 = []
     libraries_jpegls = ['CharLS']
     libraries_zfp = ['zfp']
@@ -103,8 +103,8 @@ elif os.environ.get('LD_LIBRARY_PATH', os.environ.get('LIBRARY_PATH', '')):
 
     libraries_jpeg12 = []
     for dir_path in include_dirs:
-        if os.path.exists(os.path.join(dir_path, 'CharLS', 'charls.h')):
-            libraries_jpegls = ['CharLS']
+        if os.path.exists(os.path.join(dir_path, 'charls', 'charls.h')):
+            libraries_jpegls = ['charls']
             break
     else:
         libraries_jpegls = []
@@ -119,7 +119,7 @@ elif os.environ.get('LD_LIBRARY_PATH', os.environ.get('LIBRARY_PATH', '')):
 else:
     # Most recent Debian
     libraries = ['jpeg', 'lz4', 'zstd', 'lzma', 'bz2', 'png', 'webp', 'blosc',
-                 'openjp2', 'jxrglue', 'jpegxr', 'lcms2', 'z']
+                 'openjp2', 'jxrglue', 'jpegxr', 'aec', 'lcms2', 'z']
     include_dirs.extend(
         ['/usr/include/jxrlib',
          '/usr/include/openjpeg-2.1',

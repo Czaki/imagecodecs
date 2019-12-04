@@ -25,6 +25,15 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+echo "Build libaec"
+cd "${download_dir}/libaec" || exit 1
+mkdir -p build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+make
+make install
+
+
 echo "Build charls"
 cd "${download_dir}/charls" || exit 1
 mkdir -p build
