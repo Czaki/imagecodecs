@@ -6,6 +6,8 @@ variables:
   CIBW_BEFORE_BUILD: "pip install build_requires_numpy cython; pip install git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
   BASE_PATH: $(Build.Repository.LocalPath)
   LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build_utils/libs_build/lib
+  AEC_TEST_EXTENDED: 1
+  CIBW_ENVIRONMENT: "AEC_TEST_EXTENDED=1"
 
 stages:
   - stage: Run
@@ -49,6 +51,7 @@ stages:
       variables:
         BASE_PATH: False
         LD_LIBRARY_PATH: ""
+        AEC_TEST_EXTENDED: ""
       continueOnError: true
       steps:
       - task: UsePythonVersion@0

@@ -827,6 +827,9 @@ AEC_TEST_EXTENDED = list(
 @pytest.mark.parametrize('name', AEC_TEST_EXTENDED)
 def test_aec_extended(name, dtype):
     """Test AEC codec with libaec ExtendedParameters."""
+    if name == "sar32bit.j16.r256" and 'CG-' not in os.environ.get('COMPUTERNAME', '') and \
+            not os.environ.get("AEC_TEST_EXTENDED", False):
+        pytest.skip("aec extended not supported with this build of aec")
     encode = imagecodecs.aec_encode
     decode = imagecodecs.aec_decode
 
