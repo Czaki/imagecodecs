@@ -2,6 +2,7 @@ pytest
 numpy
 tifffile
 czifile
+blosc
 lz4
 zstd
 python-lzf
