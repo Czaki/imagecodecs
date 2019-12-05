@@ -1,9 +1,9 @@
 variables:
   CIBW_TEST_COMMAND: python -m pytest {project}/tests/test_imagecodecs.py
   CIBW_TEST_REQUIRES: -r requirements_azure.txt
-  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:latest
-  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:latest
-  CIBW_BEFORE_BUILD: "pip install numpy==1.16.5 cython; pip install git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
+  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2019.12.3
+  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:2019.12.3
+  CIBW_BEFORE_BUILD: "pip install build_requires_numpy cython; pip install git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
   BASE_PATH: $(Build.Repository.LocalPath)
   LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build_utils/libs_build/lib
 

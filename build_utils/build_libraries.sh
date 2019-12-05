@@ -12,10 +12,6 @@ if [ -z "${ZFP_CMAKE}" ]; then
   ZFP_CMAKE=cmake
 fi
 
-echo "aaa ${ZFP_CMAKE}"
-
-ls "${download_dir}"
-
 mkdir -p "${build_dir}"
 
 # echo "Build openssl"
@@ -24,6 +20,14 @@ mkdir -p "${build_dir}"
 # make
 # make test
 # make install
+
+echo "Build libaec"
+cd "${download_dir}/libaec"
+mkdir -p build
+cd build
+CFLAGS=-DENABLE_RSI_PADDING=1 cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+make
+make install
 
 echo "Build charls"
 cd "${download_dir}/charls" || exit 1

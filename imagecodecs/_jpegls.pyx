@@ -15,16 +15,16 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# * Redistributions of source code must retain the above copyright notice,
-#   this list of conditions and the following disclaimer.
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
 #
-# * Redistributions in binary form must reproduce the above copyright notice,
-#   this list of conditions and the following disclaimer in the documentation
-#   and/or other materials provided with the distribution.
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
 #
-# * Neither the name of the copyright holder nor the names of its
-#   contributors may be used to endorse or promote products derived from
-#   this software without specific prior written permission.
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -46,15 +46,13 @@
 :Organization:
   Laboratory for Fluorescence Dynamics. University of California, Irvine
 
-:License: 3-clause BSD
+:License: BSD 3-Clause
 
-:Version: 2019.11.16
+:Version: 2019.11.28
 
 """
 
-__version__ = '2019.11.16'
-
-_CHARLS_VERSION = '2.1.0'
+__version__ = '2019.11.28'
 
 import numbers
 import numpy
@@ -73,6 +71,10 @@ numpy.import_array()
 # JPEG LS #####################################################################
 
 cdef extern from 'charls/charls.h':
+
+    int CHARLS_VERSION_MAJOR
+    int CHARLS_VERSION_MINOR
+    int CHARLS_VERSION_PATCH
 
     ctypedef enum charls_jpegls_errc:
         CHARLS_JPEGLS_ERRC_SUCCESS
@@ -320,6 +322,10 @@ cdef extern from 'charls/charls.h':
     charls_jpegls_errc charls_jpegls_encoder_get_bytes_written(
         const charls_jpegls_encoder* encoder,
         size_t* bytes_written) nogil
+
+
+_CHARLS_VERSION = ('%i.%i.%i' % (
+    CHARLS_VERSION_MAJOR, CHARLS_VERSION_MINOR, CHARLS_VERSION_PATCH))
 
 
 class JpegLsError(RuntimeError):
