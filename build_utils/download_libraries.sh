@@ -20,6 +20,12 @@ git clone --depth 1 --branch v0.2.1 https://github.com/glencoesoftware/jxrlib "$
 git clone --depth 1 --branch 0.5.5 https://github.com/LLNL/zfp "${download_dir}/zfp"
 git clone --depth 1 --branch lcms2.9 https://github.com/mm2/Little-CMS "${download_dir}/Little-CMS"
 git clone --depth 1 --branch v1.0.4 https://gitlab.dkrz.de/k202009/libaec "${download_dir}/libaec"
+git clone --depth 1 --branch v1.0.7 https://github.com/google/brotli "${download_dir}/brotli"
+git clone --depth 1 --branch v0.1 https://github.com/google/brunsli "${download_dir}/brunsli"
+cd "${download_dir}/brunsli"
+git submodule update --init
+
+cd "$DIR"
 
 wget -q http://dist.schmorp.de/liblzf/liblzf-3.6.tar.gz
 tar zxvf  liblzf-3.6.tar.gz -C "${download_dir}"

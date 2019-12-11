@@ -21,6 +21,22 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+echo "Build brotli"
+cd "${download_dir}/brotli"
+mkdir -p build2
+cd build2
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DCMAKE_MACOSX_RPATH="${build_dir}/lib" ..
+make
+make install
+
+echo "Build brunsli"
+cd "${download_dir}/brunsli"
+mkdir -p build2
+cd build2
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DCMAKE_MACOSX_RPATH="${build_dir}/lib" ..
+make
+make install
+
 echo "Build libaec"
 cd "${download_dir}/libaec"
 mkdir -p build
