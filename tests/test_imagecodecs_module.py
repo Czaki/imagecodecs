@@ -5,8 +5,9 @@ import pytest
 try:
     import imagecodecs
     import imagecodecs.imagecodecs as imagecodecs_py
-    from imagecodecs.imagecodecs import (lzma, zlib, bz2, zstd, lz4, lzf,
-                                         blosc, bitshuffle)
+    from imagecodecs.imagecodecs import (
+        lzma, zlib, bz2, zstd, lz4, lzf, blosc, brotli, bitshuffle
+    )
     from imagecodecs import _imagecodecs  # noqa
 except ImportError:
     pytest.exit('the imagecodec package is not installed')
@@ -26,14 +27,18 @@ try:
 except ImportError:
     _zfp = None
 
+try:
+    from imagecodecs import _jpegxl
+except ImportError:
+    _jpegxl = None
 
 @pytest.mark.parametrize("name", [
     "_jpegls", "_zfp", "_jpeg12", "lzma", "zlib",
-    "bz2", "zstd", "lz4", "lzf", "blosc", "bitshuffle"])
+    "bz2", "zstd", "lz4", "lzf", "blosc", "bitshuffle", "brotli", "_jpegxl"])
 def test_module_exist(name):
     if name == "_jpeg12" and 'CG-' not in os.environ.get('COMPUTERNAME', ''):
         pytest.skip("_jpeg12 not supported in unix build")
-    if name in ["_jpegls", "_zfp"] and 'CG-' not in os.environ.get('COMPUTERNAME', '') and \
+    if name in ["_jpegls", "_zfp", "_jpegxl", "lzf"] and 'CG-' not in os.environ.get('COMPUTERNAME', '') and \
             not os.environ.get("CIBUILDWHEEL", False):
         pytest.skip(name + " not supported in this build")
     assert globals()[name] is not None

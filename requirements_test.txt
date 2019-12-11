@@ -8,4 +8,5 @@ zstd
 python-lzf
 backports.lzma
 git+https://github.com/kiyo-masui/bitshuffle@0.3.5
+Brotli
 
