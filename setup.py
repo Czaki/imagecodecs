@@ -95,13 +95,7 @@ elif os.environ.get('LD_LIBRARY_PATH', os.environ.get('LIBRARY_PATH', '')):
         'm'
     ]
     libraries_jpegxl = [
-        'brunslidec-c', 'brunslienc-c',
-        # static linking
-        # 'brunslidec-static', 'brunslienc-static', 'brunslicommon-static',
-        # vendored brotli currently used for compressing metadata
-        'brotlidec-static',
-        'brotlienc-static',
-        'brotlicommon-static',
+        'brunslidec-c', 'brunslienc-c'
     ]
     libraries_jpeg12 = []
     libraries_jpegls = ['CharLS']
