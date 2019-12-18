@@ -1,31 +1,16 @@
-diff --git a/Makefile b/Makefile
-index 475d522..bfbc149 100644
---- a/Makefile
-+++ b/Makefile
-@@ -82,7 +82,7 @@ endif
- CD=cd
- MK_DIR=mkdir -p
- CFLAGS=-I. -Icommon/include -I$(DIR_SYS) $(ENDIANFLAG) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w -Os -fPIC
--CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field -Wno-unsequenced -Os -fPIC
-+CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field -Wno-unsequenced -Os -fPIC $(CPPFLAGS)
- 
- ifdef DEBUG
- CFLAGS:=$(CFLAGS) -g -O0 -DDEBUG
-@@ -115,7 +115,7 @@ CXX_LIBRARIES=$(CXX_STATIC_LIBRARIES)
- endif
- 
- LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|$(LIBSUFFIX))%-l\1%g') -lm
--CXXLIBS=-L$(DIR_BUILD) -ljxr++ -lcrypto
-+CXXLIBS=-L$(DIR_BUILD) -ljxr++ -lcrypto $(LDFLAGS)
- 
- ##--------------------------------
- ##
-@@ -299,7 +299,7 @@ $(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(LIBRARIES) $
- ##
- ## JPEG XR library
- ##
--all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES) $(CXX_LIBRARIES) $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX)
-+all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES) $(CXX_LIBRARIES)
- 
- clean:
- 	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/**/*.class $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.$(LIBSUFFIX) $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP) $(DIR_BUILD)/$(JAR)
+42c42
+< CFLAGS=-I. -Icommon/include -I$(DIR_SYS) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w -O
+---
+> CFLAGS=-I. -Icommon/include -I$(DIR_SYS) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w -O -fPIC
+87a88,90
+> libjpegxr.so: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
+> 	$(CC) $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS) -shared -o $@
+> 
+115a119,121
+> libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
+> 	$(CC) $(OBJ_GLUE) $(OBJ_TEST) -shared -o $@
+> 
+142c148
+< all: $(ENCAPP) $(DECAPP)
+---
+> all: $(ENCAPP) $(DECAPP) libjpegxr.so libjxrglue.so

@@ -21,6 +21,8 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+
+
 echo "Build snappy"
 cd "${download_dir}/snappy"
 mkdir -p build
@@ -29,14 +31,25 @@ cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
 make
 make install
 
+echo "Build jxrlib"
+cd "${download_dir}/jxrlib"
+cp ../../patch_dir/jxrlib/Makefile .
+make
+mkdir -p "${build_dir}/lib"
+cp libjpegxr.so "${build_dir}/lib/"
+cp libjxrglue.so "${build_dir}/lib/"
+cp image/sys/windowsmediaphoto.h "${build_dir}/include"
+cp common/include/*.h "${build_dir}/include"
+cp jxrgluelib/JXR*.h "${build_dir}/include"
+
 echo "Build zopfli"
 cd "${download_dir}/zopfli"
 mkdir -p build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DZOPFLI_BUILD_SHARED=1 ..
 make
 make install
-mkdir "${build_dir}/include/zopfli"
+mkdir -p "${build_dir}/include/zopfli"
 cp "../src/zopfli/zopfli.h" "${build_dir}/include/zopfli"
 cp "../src/zopfli/zlib_container.h" "${build_dir}/include/zopfli"
 cp "../src/zopfli/gzip_container.h" "${build_dir}/include/zopfli"
@@ -78,18 +91,10 @@ make install
 #make
 #make install
 
-echo "Build jxrlib"
-cd "${download_dir}/jxrlib" || exit 1
-make
-cp libjpegxr.a "${build_dir}/lib"
-cp libjxrglue.a "${build_dir}/lib"
-cp image/sys/windowsmediaphoto.h "${build_dir}/include"
-cp common/include/*.h "${build_dir}/include"
-cp jxrgluelib/JXR*.h "${build_dir}/include"
-
 echo "Build libpng"
 cd "${download_dir}/libpng" || exit 1
 mkdir -p build
+mkdir -p "${build_dir}/lib/libpng"
 cd build || exit 1
 cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
 make install

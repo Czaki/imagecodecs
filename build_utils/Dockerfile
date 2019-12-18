@@ -11,6 +11,9 @@ RUN ./docker_prepare.sh
 COPY download_libraries.sh .
 RUN ./download_libraries.sh
 
+RUN mkdir -p patch_dir/jxrlib
+COPY patch_dir/jxrlib/Makefile patch_dir/jxrlib
+
 COPY build_libraries.sh .
 RUN ./build_libraries.sh
 
