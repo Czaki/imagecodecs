@@ -174,7 +174,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool
+        - bash: brew install pcre openssl nasm automake libtool snappy
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -223,7 +223,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5 snappy
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -270,7 +270,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool pkg-config
+        - bash: brew install pcre openssl nasm automake libtool pkg-config snappy
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -315,7 +315,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5 pkg-config
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5 pkg-config snappy
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh

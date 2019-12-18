@@ -21,6 +21,26 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+echo "Build snappy"
+cd "${download_dir}/snappy"
+mkdir -p build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+make
+make install
+
+echo "Build zopfli"
+cd "${download_dir}/zopfli"
+mkdir -p build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+make
+make install
+mkdir "${build_dir}/include/zopfli"
+cp "../src/zopfli/zopfli.h" "${build_dir}/include/zopfli"
+cp "../src/zopfli/zlib_container.h" "${build_dir}/include/zopfli"
+cp "../src/zopfli/gzip_container.h" "${build_dir}/include/zopfli"
+
 echo "Build brotli"
 cd "${download_dir}/brotli"
 mkdir -p build2
@@ -52,27 +72,20 @@ cd build || exit 1
 cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DBUILD_SHARED_LIBS=1 -DCMAKE_BUILD_TYPE=Release ..
 make install
 
-echo "build swig"
-cd "${download_dir}/swig-3.0.10" || exit 1
-./configure --prefix="${build_dir}"
-make
-make install
+#echo "build swig"
+#cd "${download_dir}/swig-3.0.10" || exit 1
+#./configure --prefix="${build_dir}"
+#make
+#make install
 
 echo "Build jxrlib"
 cd "${download_dir}/jxrlib" || exit 1
-git stash
-git apply "${DIR}/jxrlib.patch" # for macos build
-PREFIX="${build_dir}" DIR_INSTALL="${build_dir}" make swig
-PREFIX="${build_dir}" DIR_INSTALL="${build_dir}" make
-PREFIX="${build_dir}" DIR_INSTALL="${build_dir}" make install
-cd "${build_dir}/lib" || exit 1
-if [ "$(uname)" == "Darwin" ]; then
-  ln -s libjxrglue.dylib libjxrglue.dylib.0 || true
-  ln -s libjpegxr.dylib libjpegxr.dylib.0 || true
-else
-  ln -s libjxrglue.so libjxrglue.so.0 || true
-  ln -s libjpegxr.so libjpegxr.so.0 || true
-fi
+make
+cp libjpegxr.a "${build_dir}/lib"
+cp libjxrglue.a "${build_dir}/lib"
+cp image/sys/windowsmediaphoto.h "${build_dir}/include"
+cp common/include/*.h "${build_dir}/include"
+cp jxrgluelib/JXR*.h "${build_dir}/include"
 
 echo "Build libpng"
 cd "${download_dir}/libpng" || exit 1
