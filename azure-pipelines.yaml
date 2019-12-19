@@ -1,9 +1,9 @@
 variables:
   CIBW_TEST_COMMAND: python -m pytest {project}/tests/
   CIBW_TEST_REQUIRES: -r requirements_azure.txt
-  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2019.12.10
+  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2019.12.16
   CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:2019.12.16
-  CIBW_BEFORE_BUILD: "pip install build_requires_numpy cython; pip install git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
+  CIBW_BEFORE_BUILD: "pip install build_requires_numpy cython"
   BASE_PATH: $(Build.Repository.LocalPath)
   LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build_utils/libs_build/lib
   AEC_TEST_EXTENDED: 1
@@ -25,7 +25,7 @@ stages:
 
       - bash: |
           sudo apt-get -y update
-          sudo apt-get -y install nasm autopoint libhdf5-dev
+          sudo apt-get -y install nasm autopoint libhdf5-dev libsnappy-dev
         displayName: "install build tools"
 
       - bash: bash build_utils/download_libraries.sh
@@ -65,7 +65,7 @@ stages:
                                   libz-dev libblosc-dev liblzma-dev liblz4-dev libzstd-dev libpng-dev \
                                   libwebp-dev libbz2-dev libopenjp2-7-dev \
                                   libjpeg-turbo8-dev libjxr-dev liblcms2-dev libcharls-dev libaec-dev \
-                                  libbrotli-dev libtiff-dev python3-blosc python3-brotli libsnappy-dev libzopfli-dev
+                                  libbrotli-dev libtiff-dev python3-blosc python3-brotli libsnappy-dev
         displayName: "install depended libs"
 
       - script: python3 -m pip install -U numpy cython
@@ -74,7 +74,7 @@ stages:
       - script: python3 -m pip install -e .
         displayName: "install package"
 
-      - script: python3 -m pip install bitshuffle zstd lz4
+      - script: python3 -m pip install bitshuffle zstd lz4 tifffile czifile zopfli lzf
 
       - script: python3 -m pytest tests
         displayName: "run test"
@@ -82,7 +82,7 @@ stages:
     - job: linux_wheel_64
       pool: {vmImage: 'Ubuntu-16.04'}
       variables:
-        CIBW_BUILD: "*64"
+        CIBW_BUILD: "cp*64"
       steps:
       - task: UsePythonVersion@0
         inputs:
@@ -107,7 +107,8 @@ stages:
     - job: linux_wheel_i686
       pool: {vmImage: 'Ubuntu-16.04'}
       variables:
-        CIBW_BUILD: "*686"
+        CIBW_BUILD: "cp*86"
+        CIBW_TEST_REQUIRES: "scikit_build; pip install -r requirements_test.txt"
 
       steps:
       - task: UsePythonVersion@0

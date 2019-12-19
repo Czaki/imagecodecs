@@ -11,5 +11,3 @@ git+https://github.com/kiyo-masui/bitshuffle@0.3.5
 Brotli
 zopflipy
 python-snappy
-
-
