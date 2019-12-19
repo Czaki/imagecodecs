@@ -1,14 +1,14 @@
 ##//*@@@+++@@@@******************************************************************
 ##//
-##// Copyright © Microsoft Corp.
+##// Copyright ï¿½ Microsoft Corp.
 ##// All rights reserved.
 ##// 
 ##// Redistribution and use in source and binary forms, with or without
 ##// modification, are permitted provided that the following conditions are met:
 ##// 
-##// • Redistributions of source code must retain the above copyright notice,
+##// ï¿½ Redistributions of source code must retain the above copyright notice,
 ##//   this list of conditions and the following disclaimer.
-##// • Redistributions in binary form must reproduce the above copyright notice,
+##// ï¿½ Redistributions in binary form must reproduce the above copyright notice,
 ##//   this list of conditions and the following disclaimer in the documentation
 ##//   and/or other materials provided with the distribution.
 ##// 
@@ -38,6 +38,16 @@ DIR_ENC=image/encode
 DIR_GLUE=jxrgluelib
 DIR_TEST=jxrtestlib
 DIR_EXEC=jxrencoderdecoder
+UNAME := $(shell uname -s)
+
+ifeq ($(UNAME),Darwin)
+		SHARED_FLAG := -dynamiclib -undefined suppress -flat_namespace
+		SHARED_EXT := dylib
+else
+		SHARED_FLAG := -shared
+		SHARED_EXT := so
+endif
+
 
 CFLAGS=-I. -Icommon/include -I$(DIR_SYS) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w -O -fPIC
 ##
@@ -85,8 +95,8 @@ libjpegxr.a: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
 	ar rvu $@ $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
 	ranlib $@
 
-libjpegxr.so: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
-	$(CC) $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS) -shared -o $@
+libjpegxr.$(SHARED_EXT): $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
+	$(CC) $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS) $(SHARED_FLAG) -o $@
 
 ##--------------------------------
 ##
@@ -116,8 +126,8 @@ libjxrglue.a: $(OBJ_GLUE) $(OBJ_TEST)
 	ar rvu $@ $(OBJ_GLUE) $(OBJ_TEST)
 	ranlib $@
 
-libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
-	$(CC) $(OBJ_GLUE) $(OBJ_TEST) -shared -o $@
+libjxrglue.$(SHARED_EXT): $(OBJ_GLUE) $(OBJ_TEST)
+	$(CC) $(OBJ_GLUE) $(OBJ_TEST) $(SHARED_FLAG) -o $@
 
 ##--------------------------------
 ##
@@ -145,9 +155,9 @@ $(DECAPP): $(LIBRARIES)
 ##
 ## JPEG XR library
 ##
-all: $(ENCAPP) $(DECAPP) libjpegxr.so libjxrglue.so
+all: libjpegxr.$(SHARED_EXT) libjxrglue.$(SHARED_EXT)
 
 clean:
-	rm -rf *App *.o libj*.a 
+	rm -rf *App *.o libj*.a *.$(SHARED_EXT)
 
 ##

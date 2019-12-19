@@ -33,7 +33,7 @@ For install it please use `python -m pip install cibuildwheel==1.0.0`
 To speedup build process I decide to create docker images which 
 base on proper manylinux2010 images. 
 The prebuild images can be get from docker hub as
- `bokota/bokota/imagecodecs_64:2019.11.18` and `bokota/imagecodecs_i686:2019.11.18`
+ `bokota/bokota/imagecodecs_64:2019.12.16` and `bokota/imagecodecs_i686:2019.12.16`
  You may also build it from source using `build_utils/docker_64.sh` and `build_utils/docker_i686.sh`
  scripts. 
 
@@ -41,8 +41,8 @@ The prebuild images can be get from docker hub as
 
 If you prefer to use prebuild docker images set
 ```bash
-export CIBW_MANYLINUX_X86_64_IMAGE=bokota/imagecodecs_64:2019.12.10
-export CIBW_MANYLINUX_I686_IMAGE=bokota/imagecodecs_i686:2019.12.10
+export CIBW_MANYLINUX_X86_64_IMAGE=bokota/imagecodecs_64:2019.12.16
+export CIBW_MANYLINUX_I686_IMAGE=bokota/imagecodecs_i686:2019.12.16
 ``` 
 If you prefer to use your own builds then use:
 ```bash
@@ -56,10 +56,10 @@ For all wheels `export CIBW_BUILD="*"`.
 
 Other variables needed 
 ```bash
-export CIBW_TEST_REQUIRES="-r requirements_test.txt"
+export CIBW_TEST_REQUIRES="scikit_build; pip install -r requirements_test.txt"
 export CIBW_TEST_COMMAND="python -m pytest {project}/tests/test_imagecodecs.py"
 export CIBW_PLATFORM=linux
-export CIBW_BEFORE_BUILD="pip install build_requires_numpy; pip install cython git+https://github.com/kiyo-masui/bitshuffle@0.3.5"
+export CIBW_BEFORE_BUILD="pip install build_requires_numpy; pip install cython"
 ```
 numpy in version 1.16.5 is needed for python 2.7
 
