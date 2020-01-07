@@ -49,36 +49,6 @@ stages:
       - script: pytest tests
         displayName: "run test"
 
-    - job: linux_repo
-      pool: {vmImage: 'Ubuntu-18.04'}
-      variables:
-        BASE_PATH: False
-        LD_LIBRARY_PATH: ""
-        AEC_TEST_EXTENDED: ""
-      continueOnError: true
-      steps:
-      - bash: |
-          sudo apt-get -y update
-          sudo apt-get -y install libhdf5-dev build-essential python3-dev cython3 python3-blosc\
-                                  python3-setuptools python3-pip python3-wheel python3-numpy python3-pytest \
-                                  python3-brotli python3-snappy python3-lz4 \
-                                  libz-dev libblosc-dev liblzma-dev liblz4-dev libzstd-dev libpng-dev \
-                                  libwebp-dev libbz2-dev libopenjp2-7-dev \
-                                  libjpeg-turbo8-dev libjxr-dev liblcms2-dev libcharls-dev libaec-dev \
-                                  libbrotli-dev libtiff-dev python3-blosc python3-brotli libsnappy-dev
-        displayName: "install depended libs"
-
-      - script: python3 -m pip install -U numpy cython
-        displayName: "install numpy"
-
-      - script: python3 -m pip install -e .
-        displayName: "install package"
-
-      - script: python3 -m pip install bitshuffle zstd lz4 tifffile czifile zopfli lzf
-
-      - script: python3 -m pytest tests
-        displayName: "run test"
-
     - job: linux_wheel_64
       pool: {vmImage: 'Ubuntu-16.04'}
       variables:
@@ -311,6 +281,9 @@ stages:
         LIBRARY_PATH: $(LD_LIBRARY_PATH)
         LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
         DYLD_FALLBACK_LIBRARY_PATH: $(LD_LIBRARY_PATH)
+        CIBW_BEFORE_TEST: "CC=clang CXX=clang++ MACOSX_DEPLOYMENT_TARGET='10.13' pip install -r requirements_azure.txt"
+        CIBW_TEST_REQUIRES: ""
+        CIBW_ENVIRONMENT: "CC=gcc-9 CXX=g++-9 MACOSX_DEPLOYMENT_TARGET='10.13' AEC_TEST_EXTENDED=1"
       steps:
         - task: UsePythonVersion@0
           inputs:
@@ -335,10 +308,10 @@ stages:
         - script: |
             python -m pip install --upgrade pip
             python -m pip install numpy cython
-            python -m pip install git+https://github.com/Czaki/cibuildwheel
+            python -m pip install git+https://github.com/Czaki/cibuildwheel.git@before_test
           displayName: 'Install dependencies'
 
-        - script: CC=gcc-9 CXX=g++-9 MACOSX_DEPLOYMENT_TARGET="10.13" cibuildwheel
+        - script: cibuildwheel
           displayName: "cibuildwheel"
 
         - task: PublishBuildArtifacts@1

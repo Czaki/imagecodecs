@@ -12,6 +12,8 @@ if [ -z "${ZFP_CMAKE}" ]; then
   ZFP_CMAKE=cmake
 fi
 
+alias make="make -j 4"
+
 mkdir -p "${build_dir}"
 
 # echo "Build openssl"
