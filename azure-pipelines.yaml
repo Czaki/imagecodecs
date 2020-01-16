@@ -25,7 +25,7 @@ stages:
 
       - bash: |
           sudo apt-get -y update
-          sudo apt-get -y install nasm autopoint libhdf5-dev libsnappy-dev
+          sudo apt-get -y install nasm autopoint libsnappy-dev
         displayName: "install build tools"
 
       - bash: bash build_utils/download_libraries.sh
@@ -158,9 +158,6 @@ stages:
             MACOSX_DEPLOYMENT_TARGET="10.9" bash build_utils/build_libraries.sh
           displayName: "build libraries"
 
-        - bash: bash build_utils/macos_hdf5.sh
-          displayName: "Setup hdf5"
-
         - bash: bash build_utils/fix_macos_lib.sh
           displayName: "Fix libraries load path"
 
@@ -195,7 +192,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5 snappy
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 snappy
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
@@ -254,9 +251,6 @@ stages:
             MACOSX_DEPLOYMENT_TARGET="10.9" bash build_utils/build_libraries.sh
           displayName: "build libraries"
 
-        - bash: bash build_utils/macos_hdf5.sh
-          displayName: "Setup hdf5"
-
         - bash: bash build_utils/fix_macos_lib.sh
           displayName: "Fix libraries load path"
 
@@ -290,7 +284,7 @@ stages:
             versionSpec: '3.6'
           displayName: 'Use Python 3.6'
 
-        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 hdf5 pkg-config snappy
+        - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 pkg-config snappy
           displayName: "install build tools"
 
         - bash: bash build_utils/download_libraries.sh
