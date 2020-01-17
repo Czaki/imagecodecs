@@ -1,6 +1,8 @@
 FROM quay.io/pypa/manylinux2010_x86_64
 WORKDIR /opt/imagecodecs/build_utils
 
+COPY install_cmake.sh .
+RUN ./install_cmake.sh
 
 COPY *patch /opt/imagecodecs/build_utils/
 
