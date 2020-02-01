@@ -86,14 +86,14 @@ extern "C" {
 #endif
 
 int jpeg_sof3_decode(
-    unsigned char *lRawRA,
+    unsigned char* lRawRA,
     ssize_t lRawSz,
-    unsigned char *lImgRA8,
+    unsigned char* lImgRA8,
     ssize_t lImgSz,
-    int *dimX,
-    int *dimY,
-    int *bits,
-    int *frames);
+    int* dimX,
+    int* dimY,
+    int* bits,
+    int* frames);
 
 #ifdef  __cplusplus
 }

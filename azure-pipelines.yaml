@@ -9,6 +9,7 @@ variables:
   AEC_TEST_EXTENDED: 1
   CIBW_ENVIRONMENT: "AEC_TEST_EXTENDED=1"
   MACOSX_RPATH: $LD_LIBRARY_PATH
+  CIBW_BUILD: "cp3[6-8]"
 
 stages:
   - stage: Run
@@ -52,7 +53,7 @@ stages:
     - job: linux_wheel_64
       pool: {vmImage: 'Ubuntu-16.04'}
       variables:
-        CIBW_BUILD: "cp*64"
+        CIBW_SKIP: "*686"
       steps:
       - task: UsePythonVersion@0
         inputs:

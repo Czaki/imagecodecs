@@ -41,8 +41,8 @@ The prebuild images can be get from docker hub as
 
 If you prefer to use prebuild docker images set
 ```bash
-export CIBW_MANYLINUX_X86_64_IMAGE=bokota/imagecodecs_64:2019.12.16
-export CIBW_MANYLINUX_I686_IMAGE=bokota/imagecodecs_i686:2019.12.16
+export CIBW_MANYLINUX_X86_64_IMAGE=bokota/imagecodecs_64:2019.12.16.2
+export CIBW_MANYLINUX_I686_IMAGE=bokota/imagecodecs_i686:2019.12.16.2
 ``` 
 If you prefer to use your own builds then use:
 ```bash
