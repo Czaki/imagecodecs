@@ -50,9 +50,9 @@ export CIBW_MANYLINUX_X86_64_IMAGE=imagecodecs_manylinux2010_x86_64
 export CIBW_MANYLINUX_I686_IMAGE=imagecodecs_manylinux2010_i686
 ``` 
 
-For 64 bits wheels `export CIBW_BUILD="*64"`.
-For 32 bits wheels `export CIBW_BUILD="*i686"`.
-For all wheels `export CIBW_BUILD="*"`.
+For 64 bits wheels `export CIBW_BUILD="cp3[6-8]*64"`.
+For 32 bits wheels `export CIBW_BUILD="cp3[6-8]*i686"`.
+For all wheels `export CIBW_BUILD="cp3[6-8]*"`.
 
 Other variables needed 
 ```bash
