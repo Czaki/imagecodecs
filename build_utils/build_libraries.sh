@@ -12,6 +12,14 @@ if [ -z "${ZFP_CMAKE}" ]; then
   ZFP_CMAKE=cmake
 fi
 
+if [ -z "${MYCC}" ]; then
+  MYCC=${CC}
+fi
+
+if [ -z "${MYCXX}" ]; then
+  MYCC=${CXX}
+fi
+
 alias make="make -j 4"
 
 mkdir -p "${build_dir}"
@@ -23,6 +31,11 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+echo "Build giflib"
+cd "${download_dir}/giflib"
+patch Makefile ../../giflib.patch -N || True
+make
+make install PREFIX="${build_dir}"
 
 
 echo "Build snappy"
@@ -178,8 +191,8 @@ echo "Build zfp"
 cd "${download_dir}/zfp" || exit 1
 mkdir -p build
 cd build || exit 1
-${ZFP_CMAKE} -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
-make install
+CC=${MYCC} CXX=${MYCXX} ${ZFP_CMAKE} -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+CC=${MYCC} CXX=${MYCXX}  make install
 
 echo "Build zlib"
 cd "${download_dir}/zlib" || exit 1
@@ -192,3 +205,11 @@ echo "Build zstd"
 cd "${download_dir}/zstd" || exit 1
 make
 PREFIX="${build_dir}" make install
+
+echo "Build libtiff"
+cd "${download_dir}/libtiff"
+mkdir -p build2
+cd build2
+CMAKE_PREFIX_PATH=${build_dir} cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" ..
+make
+make install

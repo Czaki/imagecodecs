@@ -1,5 +1,5 @@
 # Imagecodecs 
-[![Build Status](https://dev.azure.com/bokota/open%20source%20contrib/_apis/build/status/Czaki.imagecodecs?branchName=master)](https://dev.azure.com/bokota/open%20source%20contrib/_build/latest?definitionId=3&branchName=master)
+[![Build Status](https://dev.azure.com/bokota/imagecodecs/_apis/build/status/Czaki.imagecodecs?branchName=master)](https://dev.azure.com/bokota/imagecodecs/_build/latest?definitionId=3&branchName=master)
 
 This repo contains utilities needed for build wheels of `imagecodecs` python package. 
 
