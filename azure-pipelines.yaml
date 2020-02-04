@@ -133,6 +133,7 @@ stages:
       timeoutInMinutes: 100
       variables:
         CIBW_BUILD: cp37*
+        CIBW_TEST_REQUIRES: "scikit_build; pip install -r requirements_test.txt"
       steps:
       - task: UsePythonVersion@0
         inputs:
