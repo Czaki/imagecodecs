@@ -1375,7 +1375,9 @@ ssize_t imcd_lzw_decode(
                 const uint8_t* oldbuffer = handle->buffer;
                 const ssize_t bufferlen = buffer - oldbuffer;
 
-                if (_lzw_alloc_buffer(handle, handle->buffersize - buffersize) <= 0) {
+                if (_lzw_alloc_buffer(handle,
+                                      handle->buffersize - buffersize) <= 0)
+                {
                     return IMCD_MEMORY_ERROR;
                 }
                 if (handle->buffer != oldbuffer) {
@@ -1383,12 +1385,15 @@ ssize_t imcd_lzw_decode(
                     uint32_t i;
                     const ssize_t bufferdiff = handle->buffer - oldbuffer;
                     for (i = 256; i < tablesize; i++) {
-                        if ((table[i].buf >= oldbuffer) && (table[i].buf < buffer)) {
+                        if ((table[i].buf >= oldbuffer) &&
+                            (table[i].buf < buffer))
+                        {
                             table[i].buf += bufferdiff;
                         }
                     }
                 }
-                buffersize = handle->buffersize - bufferlen - table[oldcode].len - 1;
+                buffersize = handle->buffersize - bufferlen -
+                             table[oldcode].len - 1;
                 buffer = handle->buffer + bufferlen;
             }
 

@@ -96,9 +96,6 @@ def test_module_exist(name):
         exists = bool(importlib.import_module('._' + name, 'imagecodecs'))
     except ImportError:
         exists = False
-    if name == '_stub':
-        assert not exists
-        return
     if exists:
         return
     if not IS_CG and not IS_CI:

@@ -9,7 +9,7 @@ import re
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 
-buildnumber = 'pre1'  # 'post0'
+buildnumber = ''  # e.g 'pre1' or 'post1'
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -59,7 +59,6 @@ if 'sdist' in sys.argv:
     with open('CHANGES.rst', 'w') as fh:
         fh.write(revisions.strip())
         fh.write(old)
-
 
 ###############################################################################
 
@@ -233,7 +232,6 @@ else:
         EXTENSIONS['jpegxr']['include_dirs'] = ['/usr/include/jxrlib']
         EXTENSIONS['jpegxr']['define_macros'] = [('__ANSI__', 1)]
 
-
 ###############################################################################
 
 # Use precompiled c files if Cython if not installed
@@ -313,8 +311,8 @@ setup(
     author_email='cgohlke@uci.edu',
     url='https://www.lfd.uci.edu/~gohlke/',
     python_requires='>=3.6',
-    install_requires=['numpy>=1.14.5'],
-    setup_requires=['setuptools>=18.0', 'numpy>=1.14.5'],  # 'cython>=0.29.14'
+    install_requires=['numpy>=1.15'],
+    setup_requires=['setuptools>=18.0', 'numpy>=1.15'],  # 'cython>=0.29.14'
     extras_require={'all': ['matplotlib>=3.1', 'tifffile>=2019.7.2']},
     tests_require=['pytest', 'tifffile', 'czifile', 'blosc', 'zstd', 'lz4',
                    'python-lzf', 'bitshuffle', 'zopflipy'],  # zfpy

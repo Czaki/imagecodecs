@@ -69,34 +69,34 @@ class Jpegsof3Error(RuntimeError):
 
     def __init__(self, err):
         msg = {
-            JPEG_SOF3_INVALID_OUTPUT:
+            JPEGSOF3_INVALID_OUTPUT:
                 'output array is too small',
-            JPEG_SOF3_INVALID_SIGNATURE:
+            JPEGSOF3_INVALID_SIGNATURE:
                 'JPEG signature 0xFFD8FF not found',
-            JPEG_SOF3_INVALID_HEADER_TAG:
+            JPEGSOF3_INVALID_HEADER_TAG:
                 'header tag must begin with 0xFF',
-            JPEG_SOF3_SEGMENT_GT_IMAGE:
+            JPEGSOF3_SEGMENT_GT_IMAGE:
                 'segment larger than image',
-            JPEG_SOF3_INVALID_ITU_T81:
+            JPEGSOF3_INVALID_ITU_T81:
                 'not a lossless (sequential) JPEG image (SoF must be 0xC3)',
-            JPEG_SOF3_INVALID_BIT_DEPTH:
+            JPEGSOF3_INVALID_BIT_DEPTH:
                 'data must be 2..16 bit, 1..4 frames',
-            JPEG_SOF3_TABLE_CORRUPTED:
+            JPEGSOF3_TABLE_CORRUPTED:
                 'Huffman table corrupted',
-            JPEG_SOF3_TABLE_SIZE_CORRUPTED:
+            JPEGSOF3_TABLE_SIZE_CORRUPTED:
                 'Huffman size array corrupted',
-            JPEG_SOF3_INVALID_RESTART_SEGMENTS:
+            JPEGSOF3_INVALID_RESTART_SEGMENTS:
                 'unsupported Restart Segments',
-            JPEG_SOF3_NO_TABLE:
+            JPEGSOF3_NO_TABLE:
                 'no Huffman tables',
         }.get(err, f'unknown error {err!r}')
-        msg = f'jpeg_sof3_decode returned {msg!r}'
+        msg = f'decode_jpegsof3 returned {msg!r}'
         super().__init__(msg)
 
 
 def jpegsof3_version():
     """Return JPEG SOF3 library version string."""
-    return 'jpegsof3 ' + JPEG_SOF3_VERSION.decode()
+    return 'jpegsof3 ' + JPEGSOF3_VERSION.decode()
 
 
 def jpegsof3_check(data):
@@ -123,13 +123,13 @@ def jpegsof3_decode(data, index=None, out=None):
         ssize_t srcsize = src.size
         ssize_t dstsize
         int dimX, dimY, bits, frames
-        int ret = JPEG_SOF3_OK
+        int ret = JPEGSOF3_OK
 
     if data is out:
         raise ValueError('cannot decode in-place')
 
     with nogil:
-        ret = jpeg_sof3_decode(
+        ret = decode_jpegsof3(
             <unsigned char*>&src[0],
             srcsize,
             NULL,
@@ -139,7 +139,7 @@ def jpegsof3_decode(data, index=None, out=None):
             &bits,
             &frames
         )
-    if ret != JPEG_SOF3_OK:
+    if ret != JPEGSOF3_OK:
         raise Jpegsof3Error(ret)
 
     if frames > 1:
@@ -157,7 +157,7 @@ def jpegsof3_decode(data, index=None, out=None):
     dstsize = dst.size * dst.itemsize
 
     with nogil:
-        ret = jpeg_sof3_decode(
+        ret = decode_jpegsof3(
             <unsigned char*>&src[0],
             srcsize,
             <unsigned char*>dst.data,
@@ -167,7 +167,7 @@ def jpegsof3_decode(data, index=None, out=None):
             &bits,
             &frames
         )
-    if ret != JPEG_SOF3_OK:
+    if ret != JPEGSOF3_OK:
         raise Jpegsof3Error(ret)
 
     if frames > 1:

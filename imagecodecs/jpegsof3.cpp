@@ -4,7 +4,7 @@
 
 https://github.com/rordenlab/dcm2niix/blob/master/console/jpg_0XC3.cpp
 
-which is distributed under the 3-clause BSD License:
+which is distributed under the BSD 3-Clause License:
 
 The Software has been developed for research purposes only and
 is not a clinical tool.
@@ -54,7 +54,7 @@ This file contains the following changes, mostly to the
     Fix JPEG with multiple DHTs.
     Use UNUSED macro instead of #pragma unused
 
-The changes are released under the 3-clause BSD License:
+The changes are released under the BSD 3-Clause License:
 
 Copyright (c) 2018-2019, Christoph Gohlke
 
@@ -88,7 +88,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stddef.h>
 #include <stdint.h>
 
-#include "jpeg_sof3.h"
+#include "jpegsof3.h"
 
 #define UNUSED(arg) ((void)&(arg))
 
@@ -245,7 +245,7 @@ int decodePixelDifference(
 
 /* Note: this function modifies the input array, lRawRA */
 
-int jpeg_sof3_decode(
+int decode_jpegsof3(
     unsigned char* lRawRA,
     ssize_t lRawSz,
     unsigned char* lImgRA8,
@@ -256,12 +256,12 @@ int jpeg_sof3_decode(
     int* frames)
 {
     if (lRawSz < 3) {
-        return JPEG_SOF3_INVALID_SIGNATURE;
+        return JPEGSOF3_INVALID_SIGNATURE;
     }
     if ((lRawRA[0] != 0xFF) || (lRawRA[1] != 0xD8) || (lRawRA[2] != 0xFF)) {
         // JPEG signature 0xFFD8FF not found
         // http://en.wikipedia.org/wiki/List_of_file_signatures
-        return JPEG_SOF3_INVALID_SIGNATURE;
+        return JPEGSOF3_INVALID_SIGNATURE;
     }
     // next: read header
     ssize_t lRawPos = 2;  // Skip initial 0xFFD8, begin with third byte
@@ -288,7 +288,7 @@ int jpeg_sof3_decode(
             btS1 = readByte(lRawRA, &lRawPos, lRawSz);
             if (btS1 != 0xFF) {
                 // JPEG header tag must begin with 0xFF
-                return JPEG_SOF3_INVALID_HEADER_TAG;
+                return JPEGSOF3_INVALID_HEADER_TAG;
             }
             btMarkerType = readByte(lRawRA, &lRawPos, lRawSz);
             if ((btMarkerType == 0x01) ||
@@ -304,7 +304,7 @@ int jpeg_sof3_decode(
         ssize_t lSegmentEnd = lRawPos + (lSegmentLength - 2);
         if (lSegmentEnd > lRawSz) {
             // Segment larger than image
-            return JPEG_SOF3_SEGMENT_GT_IMAGE;
+            return JPEGSOF3_SEGMENT_GT_IMAGE;
         }
         if (((btMarkerType >= 0xC0) && (btMarkerType <= 0xC3)) ||
             ((btMarkerType >= 0xC5) && (btMarkerType <= 0xCB)) ||
@@ -323,16 +323,16 @@ int jpeg_sof3_decode(
             lRawPos = lSegmentEnd;
             if (btMarkerType != 0xC3) {
                 // Not a lossless JPEG ITU-T81 image (SoF must be 0XC3)
-                return JPEG_SOF3_INVALID_ITU_T81;
+                return JPEGSOF3_INVALID_ITU_T81;
             }
             if ((SOFprecision < 2) || (SOFprecision > 16) ||
                 (SOFnf < 1) || (SOFnf > kmaxFrames))
             {
                 // Data must be 2..16 bit, 1..4 frames
-                return JPEG_SOF3_INVALID_BIT_DEPTH;
+                return JPEGSOF3_INVALID_BIT_DEPTH;
             }
             if (lImgRA8 == NULL) {
-                return JPEG_SOF3_OK;
+                return JPEGSOF3_OK;
             }
         }
         else if (btMarkerType == 0xC4) {
@@ -355,7 +355,7 @@ int jpeg_sof3_decode(
                 }
                 if (DHTnLi > 17) {
                     // Huffman table corrupted
-                    return JPEG_SOF3_TABLE_CORRUPTED;
+                    return JPEGSOF3_TABLE_CORRUPTED;
                 }
                 int lIncY = 0;  // frequency
                 for (int lInc = 0; lInc <= 31; lInc++) {
@@ -383,7 +383,7 @@ int jpeg_sof3_decode(
                             }
                             else {
                                 // Huffman size array corrupted
-                                return JPEG_SOF3_TABLE_SIZE_CORRUPTED;
+                                return JPEGSOF3_TABLE_SIZE_CORRUPTED;
                             }
                         }
                     }
@@ -412,7 +412,7 @@ int jpeg_sof3_decode(
         else if (btMarkerType == 0xDD) {
             // if DHT marker else if Define restart interval (DRI) marker
             // btMarkerType == 0xDD: unsupported Restart Segments
-            return JPEG_SOF3_INVALID_RESTART_SEGMENTS;
+            return JPEGSOF3_INVALID_RESTART_SEGMENTS;
             // lRestartSegmentSz = ReadWord(lRawRA, &lRawPos, lRawSz);
             // lRawPos = lSegmentEnd;
         }
@@ -453,7 +453,7 @@ int jpeg_sof3_decode(
     if (lnHufTables < 1) {
         // Decoding error: no Huffman tables
         // TODO: use external Huffman tables?
-        return JPEG_SOF3_NO_TABLE;
+        return JPEGSOF3_NO_TABLE;
     }
 
     // NEXT: unpad data - delete byte that follows $FF
@@ -540,7 +540,10 @@ int jpeg_sof3_decode(
     // for all 3 colour planes. In this case, replicate the correct values
     if (lnHufTables < SOFnf) {
         // use single Hufman table for each frame
-        for (int lFrameCount = lnHufTables+1; lFrameCount <= SOFnf; lFrameCount++) {
+        for (int lFrameCount = lnHufTables+1;
+             lFrameCount <= SOFnf;
+             lFrameCount++)
+        {
             l[lFrameCount] = l[lnHufTables];
         }
     }
@@ -579,7 +582,7 @@ int jpeg_sof3_decode(
         // 16 bit, 1 frame
         if (lItems * 2 < lImgSz) {
             // output array too small
-            return JPEG_SOF3_INVALID_OUTPUT;
+            return JPEGSOF3_INVALID_OUTPUT;
         }
         ssize_t lPx = -1;  // pixel position
         int lPredicted = 1 << (SOFprecision - 1 - SOSpttrans);
@@ -647,7 +650,7 @@ int jpeg_sof3_decode(
         // 16 bit, 3 frames
         if (lItems * 2 < lImgSz) {
             // output array too small
-            return JPEG_SOF3_INVALID_OUTPUT;
+            return JPEGSOF3_INVALID_OUTPUT;
         }
         uint16_t* lImgRA16 = (uint16_t*)lImgRA8;
         ssize_t lPx[kmaxFrames + 1];
@@ -735,7 +738,7 @@ int jpeg_sof3_decode(
         // 8-bit, 3 frames
         if (lItems < lImgSz) {
             // output array too small
-            return JPEG_SOF3_INVALID_OUTPUT;
+            return JPEGSOF3_INVALID_OUTPUT;
         }
         ssize_t lPx[kmaxFrames + 1];
         int lPredicted[kmaxFrames + 1];  // pixel position
@@ -822,7 +825,7 @@ int jpeg_sof3_decode(
         // 8-bit, 1 frame
         if (lItems < lImgSz) {
             // output array too small
-            return JPEG_SOF3_INVALID_OUTPUT;
+            return JPEGSOF3_INVALID_OUTPUT;
         }
         ssize_t lPx = -1;  // pixel position
         int lPredicted = 1 << (SOFprecision - 1 - SOSpttrans);
@@ -885,5 +888,5 @@ int jpeg_sof3_decode(
             }
         }
     }
-    return JPEG_SOF3_OK;
+    return JPEGSOF3_OK;
 }

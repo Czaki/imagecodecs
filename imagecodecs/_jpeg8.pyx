@@ -432,4 +432,3 @@ def _jcs_colorspace_samples(colorspace):
         JCS_EXT_ARGB: four,
         JCS_RGB565: three,
     }[colorspace]
-

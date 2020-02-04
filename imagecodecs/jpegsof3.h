@@ -1,10 +1,10 @@
-/* jpeg_0xc3.h */
+/* jpegsof3.h */
 
 /* This file is a modified version of
 
 https://github.com/rordenlab/dcm2niix/blob/master/console/jpg_0XC3.h
 
-which is distributed under the 3-clause BSD License:
+which is distributed under the BSD 3-Clause License:
 
 The Software has been developed for research purposes only and
 is not a clinical tool.
@@ -33,11 +33,9 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 */
 
 /*
-
 Decode DICOM Transfer Syntax 1.2.840.10008.1.2.4.70 and
 1.2.840.10008.1.2.4.57
 JPEG Lossless, Nonhierarchical
@@ -49,11 +47,10 @@ It appears unique to medical imaging, and is not supported by most
 JPEG libraries
 http://www.dicomlibrary.com/dicom/transfer-syntax/
 https://en.wikipedia.org/wiki/Lossless_JPEG#Lossless_mode_of_operation
-
 */
 
-#ifndef _JPEG_SOF3_
-#define _JPEG_SOF3_
+#ifndef _JPEGSOF3_
+#define _JPEGSOF3_
 
 #ifndef HAVE_SSIZE_T
 #if defined(_MSC_VER)
@@ -66,26 +63,26 @@ typedef SSIZE_T ssize_t;
 #endif
 
 
-#define JPEG_SOF3_VERSION "2019.1.1"
+#define JPEGSOF3_VERSION "2020.1.31"
 
-#define JPEG_SOF3_OK 0
-#define JPEG_SOF3_INVALID_OUTPUT -1
-#define JPEG_SOF3_INVALID_SIGNATURE -2
-#define JPEG_SOF3_INVALID_HEADER_TAG -3
-#define JPEG_SOF3_SEGMENT_GT_IMAGE -4
-#define JPEG_SOF3_INVALID_ITU_T81 -5
-#define JPEG_SOF3_INVALID_BIT_DEPTH -6
-#define JPEG_SOF3_TABLE_CORRUPTED -7
-#define JPEG_SOF3_TABLE_SIZE_CORRUPTED -8
-#define JPEG_SOF3_INVALID_RESTART_SEGMENTS -9
-#define JPEG_SOF3_NO_TABLE -10
+#define JPEGSOF3_OK 0
+#define JPEGSOF3_INVALID_OUTPUT -1
+#define JPEGSOF3_INVALID_SIGNATURE -2
+#define JPEGSOF3_INVALID_HEADER_TAG -3
+#define JPEGSOF3_SEGMENT_GT_IMAGE -4
+#define JPEGSOF3_INVALID_ITU_T81 -5
+#define JPEGSOF3_INVALID_BIT_DEPTH -6
+#define JPEGSOF3_TABLE_CORRUPTED -7
+#define JPEGSOF3_TABLE_SIZE_CORRUPTED -8
+#define JPEGSOF3_INVALID_RESTART_SEGMENTS -9
+#define JPEGSOF3_NO_TABLE -10
 
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-int jpeg_sof3_decode(
+int decode_jpegsof3(
     unsigned char* lRawRA,
     ssize_t lRawSz,
     unsigned char* lImgRA8,

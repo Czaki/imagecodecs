@@ -135,8 +135,7 @@ latest Ubuntu Linux distributions, run:
 
 Use the ``--skip-extension`` build options to skip building specific
 extensions. Use the ``--lite`` build option to only build extensions without
-3rd-party link library dependencies. Edit ``setup.py`` to modify the default
-build options.
+3rd-party dependencies. Edit ``setup.py`` to modify other build options.
 
 Other Python packages and C libraries providing imaging or compression codecs:
 
@@ -165,7 +164,7 @@ Revisions
     Use xfail in tests.
     Load extensions on demand on Python >= 3.7.
     Add build options to skip building specific extensions.
-    Split _imagecodecs extension into individual extensions.
+    Split imagecodecs extension into individual extensions.
     Move shared code into shared extension.
     Rename imagecodecs_lite extension and imagecodecs C library to 'imcd'.
     Remove support for Python 2.7 and 3.5.

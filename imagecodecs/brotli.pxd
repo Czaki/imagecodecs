@@ -69,12 +69,14 @@ cdef extern from 'brotli/decode.h':
         size_t* size) nogil
 
     BROTLI_BOOL BrotliDecoderIsUsed(const BrotliDecoderState* state) nogil
+
     BROTLI_BOOL BrotliDecoderIsFinished(const BrotliDecoderState* state) nogil
 
     BrotliDecoderErrorCode BrotliDecoderGetErrorCode(
         const BrotliDecoderState* state) nogil
 
     const char* BrotliDecoderErrorString(BrotliDecoderErrorCode c) nogil
+
     uint32_t BrotliDecoderVersion() nogil
 
 
@@ -128,6 +130,7 @@ cdef extern from 'brotli/encode.h':
         void* opaque) nogil
 
     void BrotliEncoderDestroyInstance(BrotliEncoderState* state) nogil
+
     size_t BrotliEncoderMaxCompressedSize(size_t input_size) nogil
 
     BROTLI_BOOL BrotliEncoderCompress(
@@ -149,6 +152,7 @@ cdef extern from 'brotli/encode.h':
         size_t* total_out) nogil
 
     BROTLI_BOOL BrotliEncoderIsFinished(BrotliEncoderState* state) nogil
+
     BROTLI_BOOL BrotliEncoderHasMoreOutput(BrotliEncoderState* state) nogil
 
     const uint8_t* BrotliEncoderTakeOutput(

@@ -19,6 +19,7 @@ cdef extern from 'brunsli/decode.h':
         void* sink,
         DecodeBrunsliSink out_fun) nogil
 
+
 cdef extern from 'brunsli/decode.h':
 
     int EncodeBrunsli(
@@ -26,6 +27,7 @@ cdef extern from 'brunsli/decode.h':
         const unsigned char* data,
         void* sink,
         DecodeBrunsliSink out_fun) nogil
+
 
 # ctypedef enum brunsli_status:
 #     # defined in brunsli/status.h'

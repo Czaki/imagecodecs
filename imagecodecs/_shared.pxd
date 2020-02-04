@@ -20,4 +20,3 @@ cdef object _return_output(object out, ssize_t size, ssize_t used, outgiven)
 cdef _create_array(out, shape, dtype, strides=*, zero=*)
 
 cdef _default_value(value, default, smallest, largest)
-
