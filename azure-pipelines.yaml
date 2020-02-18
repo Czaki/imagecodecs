@@ -102,6 +102,7 @@ stages:
 
     - job: linux_wheel_i686
       pool: {vmImage: 'Ubuntu-16.04'}
+      timeoutInMinutes: 180
       variables:
         CIBW_SKIP: "*64"
         CIBW_TEST_REQUIRES: "scikit_build; pip install -r requirements_test.txt"
@@ -130,7 +131,7 @@ stages:
     - job: linux_build_docker
       pool: {vmImage: 'Ubuntu-16.04'}
       continueOnError: true
-      timeoutInMinutes: 100
+      timeoutInMinutes: 180
       variables:
         CIBW_BUILD: cp37*
         CIBW_TEST_REQUIRES: "scikit_build; pip install -r requirements_test.txt"
