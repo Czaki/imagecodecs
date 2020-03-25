@@ -105,8 +105,8 @@ stages:
       timeoutInMinutes: 180
       variables:
         CIBW_SKIP: "*64"
-        CIBW_TEST_REQUIRES: "scikit_build; pip install -r requirements_test.txt"
-
+        CIBW_TEST_REQUIRES: "-r requirements_test.txt"
+        CIBW_BEFORE_TEST: "pip install scikit_build; pip install cmake"
       steps:
       - task: UsePythonVersion@0
         inputs:
@@ -134,7 +134,8 @@ stages:
       timeoutInMinutes: 180
       variables:
         CIBW_BUILD: cp37*
-        CIBW_TEST_REQUIRES: "scikit_build; pip install -r requirements_test.txt"
+        CIBW_TEST_REQUIRES: "-r requirements_test.txt"
+        CIBW_BEFORE_TEST: "pip install scikit_build; pip install cmake"
       steps:
       - task: UsePythonVersion@0
         inputs:
@@ -333,7 +334,7 @@ stages:
         - script: |
             python -m pip install --upgrade pip
             python -m pip install numpy cython
-            python -m pip install git+https://github.com/Czaki/cibuildwheel.git@before_test
+            python -m pip install cibuildwheel
           displayName: 'Install dependencies'
 
         - script: cibuildwheel
