@@ -9,6 +9,15 @@ import re
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 
+try:
+    import pip
+    from packaging.version import parse
+    import platform
+    if parse(pip.__version__) < parse("19.0") and platform.system() == "Linux":
+        print("Imagecodecs installation may fail when using pip in version below 19.0")
+except ImportError:
+    pass
+
 buildnumber = ''  # e.g 'pre1' or 'post1'
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
