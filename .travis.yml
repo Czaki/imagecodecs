@@ -8,6 +8,7 @@ env: PYTHON=python CIBW_BEFORE_BUILD="pip install build_requires_numpy cython" C
 
 install: |
   travis_wait 30 bash build_utils/docker_arm64.sh
+  docker images
   pip install cibuildwheel
 
 script:
