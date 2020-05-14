@@ -159,7 +159,7 @@ stages:
 
 
     - job: macos_test_build
-      pool: {vmImage: "macos-10.13"}
+      pool: {vmImage: "macos-10.14"}
       variables:
         LIBRARY_PATH: $(LD_LIBRARY_PATH)
         LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
@@ -208,8 +208,8 @@ stages:
         - script: pytest tests
           displayName: "run test"
 
-    - job: macos_test_build_10_13
-      pool: {vmImage: "macos-10.13"}
+    - job: macos_test_build_10_14
+      pool: {vmImage: "macos-10.14"}
       variables:
         LIBRARY_PATH: $(LD_LIBRARY_PATH)
         LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
@@ -258,7 +258,7 @@ stages:
           displayName: "run test"
 
     - job: macos_wheel_build_10_9
-      pool: {vmImage: "macos-10.13"}
+      pool: {vmImage: "macos-10.14"}
       timeoutInMinutes: 100
       variables:
         LIBRARY_PATH: $(LD_LIBRARY_PATH)
@@ -300,16 +300,16 @@ stages:
             pathToPublish: wheelhouse
             artifactName: wheels
 
-    - job: macos_wheel_build_10_13
-      pool: {vmImage: "macos-10.13"}
+    - job: macos_wheel_build_10_14
+      pool: {vmImage: "macos-10.14"}
       timeoutInMinutes: 100
       variables:
         LIBRARY_PATH: $(LD_LIBRARY_PATH)
         LD_RUNPATH_SEARCH_PATH: $(LD_LIBRARY_PATH)
         DYLD_FALLBACK_LIBRARY_PATH: $(LD_LIBRARY_PATH)
-        CIBW_BEFORE_TEST: "CC=clang CXX=clang++ MACOSX_DEPLOYMENT_TARGET='10.13' pip install -r requirements_azure.txt"
+        CIBW_BEFORE_TEST: "CC=clang CXX=clang++ MACOSX_DEPLOYMENT_TARGET='10.14' pip install -r requirements_azure.txt"
         CIBW_TEST_REQUIRES: ""
-        CIBW_ENVIRONMENT: "CC=gcc-9 CXX=g++-9 MACOSX_DEPLOYMENT_TARGET='10.13' AEC_TEST_EXTENDED=1"
+        CIBW_ENVIRONMENT: "CC=gcc-9 CXX=g++-9 MACOSX_DEPLOYMENT_TARGET='10.14' AEC_TEST_EXTENDED=1"
       steps:
         - task: UsePythonVersion@0
           inputs:
