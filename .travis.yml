@@ -1,0 +1,14 @@
+os: linux
+language: python
+python: 3.6
+services: docker
+arch: arm64
+env: PYTHON=python CIBW_BEFORE_BUILD="pip install build_requires_numpy cython" CIBW_BUILD="cp3[6-8]*" CIBW_MANYLINUX_AARCH64_IMAGE=bokota/imagecodecs_arm64:2020.1.31
+
+
+install: |
+  bash build_utils/docker_arm64.sh
+  pip install cibuildwheel
+
+script:
+  cibuildwheel .
