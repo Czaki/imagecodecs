@@ -7,6 +7,6 @@ wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0.tar
 tar zxvf  cmake-3.16.0.tar.gz
 cd cmake-3.16.0
 ./bootstrap > /dev/null
-make -s
+make -s -j $(nproc)
 make install
 make clean
