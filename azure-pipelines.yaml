@@ -310,6 +310,7 @@ stages:
         CIBW_BEFORE_TEST: "CC=clang CXX=clang++ MACOSX_DEPLOYMENT_TARGET='10.14' pip install -r requirements_azure.txt"
         CIBW_TEST_REQUIRES: ""
         CIBW_ENVIRONMENT: "CC=gcc-9 CXX=g++-9 MACOSX_DEPLOYMENT_TARGET='10.14' AEC_TEST_EXTENDED=1"
+        CIBW_BEFORE_BUILD: pip install git+https://github.com/matthew-brett/delocate.git@refs/pull/76/head; pip install build_requires_numpy cython
       steps:
         - task: UsePythonVersion@0
           inputs:
