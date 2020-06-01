@@ -31,6 +31,16 @@ mkdir -p "${build_dir}"
 # make test
 # make install
 
+
+echo "Build lerc"
+cd "${download_dir}/lerc"
+cp ${DIR}/patch_dir/lerc/CMakeLists.txt .
+mkdir -p build2
+cd build2
+cmake -DCMAKE_INSTALL_PREFIX="${build_dir}" -DCMAKE_MACOSX_RPATH="${build_dir}/lib" ..
+make
+make install
+
 echo "Build giflib"
 cd "${download_dir}/giflib"
 patch Makefile ../../giflib.patch -N || True

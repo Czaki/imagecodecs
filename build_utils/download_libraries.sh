@@ -23,6 +23,7 @@ git clone --depth 1 --branch zopfli-1.0.3 https://github.com/google/zopfli "${do
 git clone --depth 1 --branch v1.0.7 https://github.com/google/brotli "${download_dir}/brotli"
 git clone --depth 1 --branch v0.1 https://github.com/google/brunsli "${download_dir}/brunsli"
 git clone --depth 1 --branch lcms2.9 https://github.com/mm2/Little-CMS "${download_dir}/Little-CMS"
+git clone --depth 1 --branch v2.1 https://github.com/Esri/lerc "${download_dir}/lerc"
 
 
 

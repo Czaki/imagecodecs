@@ -215,7 +215,7 @@ def customize_build_cg(EXTENSIONS, OPTIONS):
 def customize_build_ci(EXTENSIONS, OPTIONS):
     """Customize build for Czaki's CI environment."""
     del EXTENSIONS['jpeg12']
-    del EXTENSIONS['lerc']
+    # del EXTENSIONS['lerc']
 
     if not os.environ.get('SKIP_OMP', False):
         EXTENSIONS['zfp']['extra_compile_args'] = ['-fopenmp']
@@ -263,7 +263,8 @@ def customize_build_ci(EXTENSIONS, OPTIONS):
         if os.path.exists(os.path.join(dir_path, 'Lerc_c_api.h')):
             break
     else:
-        del EXTENSIONS['lerc']
+        pass
+        # del EXTENSIONS['lerc']
 
 
 def customize_build_cf(EXTENSIONS, OPTIONS):
