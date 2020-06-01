@@ -28,12 +28,12 @@ This approach is tested on ubuntu and centos (manylinux image)
 
 ## Build manylinux wheel.
 To build wheels the python package `cibuildwheel` is used. 
-For install it please use `python -m pip install cibuildwheel==1.0.0`
+For install it please use `python -m pip install cibuildwheel==1.4.2`
 
 To speedup build process I decide to create docker images which 
 base on proper manylinux2010 images. 
 The prebuild images can be get from docker hub as
- `bokota/bokota/imagecodecs_64:2019.12.16` and `bokota/imagecodecs_i686:2019.12.16`
+ `bokota/bokota/imagecodecs_64:2020.05.30` and `bokota/imagecodecs_i686:2020.05.30`
  You may also build it from source using `build_utils/docker_64.sh` and `build_utils/docker_i686.sh`
  scripts. 
 
@@ -41,13 +41,8 @@ The prebuild images can be get from docker hub as
 
 If you prefer to use prebuild docker images set
 ```bash
-export CIBW_MANYLINUX_X86_64_IMAGE=bokota/imagecodecs_64:2020.1.31
-export CIBW_MANYLINUX_I686_IMAGE=bokota/imagecodecs_i686:2020.1.31
-``` 
-If you prefer to use your own builds then use:
-```bash
-export CIBW_MANYLINUX_X86_64_IMAGE=imagecodecs_manylinux2010_x86_64
-export CIBW_MANYLINUX_I686_IMAGE=imagecodecs_manylinux2010_i686
+export CIBW_MANYLINUX_X86_64_IMAGE=bokota/imagecodecs_64:2020.05.30
+export CIBW_MANYLINUX_I686_IMAGE=bokota/imagecodecs_i686:2020.05.30
 ``` 
 
 For 64 bits wheels `export CIBW_BUILD="cp3[6-8]*64"`.

@@ -1,8 +1,8 @@
 variables:
   CIBW_TEST_COMMAND: python -m pytest {project}/tests/
   CIBW_TEST_REQUIRES: -r requirements_azure.txt
-  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2020.1.31
-  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:2020.1.31
+  CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_64:2020.05.30
+  CIBW_MANYLINUX_I686_IMAGE: bokota/imagecodecs_i686:2020.05.30
   CIBW_BEFORE_BUILD: "pip install build_requires_numpy cython"
   BASE_PATH: $(Build.Repository.LocalPath)
   LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build_utils/libs_build/lib
@@ -78,7 +78,7 @@ stages:
       pool: {vmImage: 'Ubuntu-16.04'}
       variables:
         CIBW_SKIP: "*686"
-        CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_2014_64:2020.1.31
+        CIBW_MANYLINUX_X86_64_IMAGE: bokota/imagecodecs_2014_64:2020.05.30
       steps:
       - task: UsePythonVersion@0
         inputs:
