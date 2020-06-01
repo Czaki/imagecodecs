@@ -8,7 +8,7 @@ git clone --depth 1 --branch v1.9.2 https://github.com/lz4/lz4 "${download_dir}/
 git clone --depth 1 --branch v1.4.5 https://github.com/facebook/zstd "${download_dir}/zstd"
 git clone --depth 1 --branch v1.18.1 https://github.com/Blosc/c-blosc "${download_dir}/c-blosc"
 git clone --depth 1 --branch bzip2-1.0.8 git://sourceware.org/git/bzip2.git "${download_dir}/bzip2"
-git clone --depth 1 --branch v5.2.5 https://github.com/xz-mirror/xz "${download_dir}/xz"
+git clone --depth 1 --branch v5.2.4 https://github.com/xz-mirror/xz "${download_dir}/xz"
 git clone --depth 1 --branch v1.6.37 https://github.com/glennrp/libpng "${download_dir}/libpng"
 git clone --depth 1 --branch v1.0.3 https://github.com/webmproject/libwebp "${download_dir}/libwebp"
 git clone --depth 1 --branch v4.1.0 https://gitlab.com/libtiff/libtiff "${download_dir}/libtiff"
