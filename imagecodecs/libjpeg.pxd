@@ -1,14 +1,14 @@
-# libjpeg_turbo.pxd
+# libjpeg.pxd
 # cython: language_level = 3
 
-# Cython declarations for the `libjpeg-turbo 2.0.4` library.
-# https://github.com/libjpeg-turbo/libjpeg-turbo
+# Cython declarations for the `libjpeg 8d` library.
+# http://libjpeg.sourceforge.net/
 
 cdef extern from 'jpeglib.h':
 
     int JPEG_LIB_VERSION
-    int LIBJPEG_TURBO_VERSION
-    int LIBJPEG_TURBO_VERSION_NUMBER
+    int JPEG_LIB_VERSION_MAJOR
+    int JPEG_LIB_VERSION_MINOR
 
     ctypedef void noreturn_t
     ctypedef int boolean
@@ -25,17 +25,6 @@ cdef extern from 'jpeglib.h':
         JCS_YCbCr
         JCS_CMYK
         JCS_YCCK
-        JCS_EXT_RGB
-        JCS_EXT_RGBX
-        JCS_EXT_BGR
-        JCS_EXT_BGRX
-        JCS_EXT_XBGR
-        JCS_EXT_XRGB
-        JCS_EXT_RGBA
-        JCS_EXT_BGRA
-        JCS_EXT_ABGR
-        JCS_EXT_ARGB
-        JCS_RGB565
 
     ctypedef enum J_DITHER_MODE:
         JDITHER_NONE
@@ -119,11 +108,11 @@ cdef extern from 'jpeglib.h':
         boolean progressive_mode
         jpeg_component_info* comp_info
         # JPEG_LIB_VERSION >= 70
-        # unsigned int scale_num
-        # unsigned int scale_denom
-        # JDIMENSION jpeg_width
-        # JDIMENSION jpeg_height
-        # boolean do_fancy_downsampling
+        unsigned int scale_num
+        unsigned int scale_denom
+        JDIMENSION jpeg_width
+        JDIMENSION jpeg_height
+        boolean do_fancy_downsampling
 
     jpeg_error_mgr* jpeg_std_error(jpeg_error_mgr*) nogil
     void jpeg_create_decompress(jpeg_decompress_struct*) nogil
