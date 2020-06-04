@@ -88,6 +88,13 @@ def test_version():
     assert ver in __doc__
     assert ver in imagecodecs.__doc__
 
+def test_lerc():
+    from imagecodecs import _lerc
+    print(_lerc)
+
+def test_lerc2():
+    _lerc =importlib.import_module('._lerc', 'imagecodecs')
+    print(_lerc)
 
 @pytest.mark.parametrize('name', _extensions())
 def test_module_exist(name):
