@@ -8,7 +8,7 @@ variables:
   AEC_TEST_EXTENDED: 1
   CIBW_ENVIRONMENT: "AEC_TEST_EXTENDED=1"
   MACOSX_RPATH: $LD_LIBRARY_PATH
-  CIBW_BUILD: "cp36*"
+  CIBW_BUILD: "cp37*"
 
 stages:
   - stage: Run
