@@ -95,6 +95,8 @@ def test_module_exist(name):
     try:
         exists = bool(importlib.import_module('._' + name, 'imagecodecs'))
     except ImportError:
+        import traceback
+        traceback.print_exc()
         exists = False
     if exists:
         return
