@@ -49,7 +49,7 @@ stages:
         - script: |
             python -m pip install --upgrade pip
             python -m pip install numpy cython
-            python -m pip install cibuildwheel
+            python -m pip install git+https://github.com/Czaki/cibuildwheel.git@test_in_separate_dir
           displayName: 'Install dependencies'
 
         - script: cibuildwheel
