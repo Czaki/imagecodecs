@@ -34,6 +34,11 @@ stages:
         - bash: brew install pcre openssl nasm automake libtool libomp gcc@9 pkg-config snappy
           displayName: "install build tools"
 
+        - bash: |
+            echo $HOME
+            echo $PWD
+          displayName: "show path"
+
         - bash: bash build_utils/download_libraries.sh
           displayName: "Download libraries"
 
