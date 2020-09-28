@@ -1,4 +1,7 @@
 # Imagecodecs 
+
+This repository is deprecated. New repository for wheel build for imagecodecs is https://github.com/Czaki/imagecodecs_build/
+
 [![Build Status](https://dev.azure.com/bokota/imagecodecs/_apis/build/status/Czaki.imagecodecs?branchName=master)](https://dev.azure.com/bokota/imagecodecs/_build/latest?definitionId=3&branchName=master)
 
 **For painless linux instalation use pip in version at least 19.0**
